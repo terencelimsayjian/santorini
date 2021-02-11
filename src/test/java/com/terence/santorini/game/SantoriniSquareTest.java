@@ -22,7 +22,7 @@ class SantoriniSquareTest {
     void shouldAddWorker() throws GameBoardException {
       SantoriniSquare santoriniSquare = SantoriniSquare.initiateEmptySquare();
 
-      santoriniSquare.placeWorker(new SantoriniWorker());
+      santoriniSquare.placeWorker(new SantoriniWorker(1));
 
       assertTrue(santoriniSquare.getWorker().isPresent());
     }
@@ -32,7 +32,7 @@ class SantoriniSquareTest {
       SantoriniSquare santoriniSquare = SantoriniSquare.initiateEmptySquare();
 
       santoriniSquare.placeNextBlock();
-      santoriniSquare.placeWorker(new SantoriniWorker());
+      santoriniSquare.placeWorker(new SantoriniWorker(1));
 
       assertTrue(santoriniSquare.getWorker().isPresent());
     }
@@ -43,7 +43,7 @@ class SantoriniSquareTest {
 
       santoriniSquare.placeNextBlock();
       santoriniSquare.placeNextBlock();
-      santoriniSquare.placeWorker(new SantoriniWorker());
+      santoriniSquare.placeWorker(new SantoriniWorker(1));
 
       assertTrue(santoriniSquare.getWorker().isPresent());
     }
@@ -55,7 +55,7 @@ class SantoriniSquareTest {
       santoriniSquare.placeNextBlock();
       santoriniSquare.placeNextBlock();
       santoriniSquare.placeNextBlock();
-      santoriniSquare.placeWorker(new SantoriniWorker());
+      santoriniSquare.placeWorker(new SantoriniWorker(1));
 
       assertTrue(santoriniSquare.getWorker().isPresent());
     }
@@ -69,7 +69,7 @@ class SantoriniSquareTest {
       santoriniSquare.placeNextBlock();
       santoriniSquare.placeNextBlock();
 
-      GameBoardException e = assertThrows(GameBoardException.class, () -> santoriniSquare.placeWorker(new SantoriniWorker()));
+      GameBoardException e = assertThrows(GameBoardException.class, () -> santoriniSquare.placeWorker(new SantoriniWorker(1)));
       assertEquals("Cannot place worker on a dome", e.getMessage());
     }
   }

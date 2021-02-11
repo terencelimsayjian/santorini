@@ -41,7 +41,7 @@ class SantoriniBoardTest {
     SantoriniBoard board = SantoriniBoard.initiateBoard();
 
     GridPosition grid = GridPosition.valueOf(santoriniGrid);
-    board.placeWorker(grid, new SantoriniWorker());
+    board.placeWorker(grid, new SantoriniWorker(1));
 
     List<List<SantoriniSquare>> gameBoard = board.gameBoard;
 
@@ -49,11 +49,20 @@ class SantoriniBoardTest {
   }
 
   @Test
+  void shouldThrowExceptionIfPlacingWorkerThatAlreadyExistsOnTheBoard() throws GameBoardException {
+    SantoriniBoard board = SantoriniBoard.initiateBoard();
+
+    board.placeWorker(GridPosition.D1, new SantoriniWorker(1));
+    GameBoardException e = assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker(1)));
+    assertEquals("Worker already exsts", e.getMessage());
+  }
+
+  @Test
   void shouldAllowExceptionToBubbleUpIfWorkerIsPlacedInOccupiedSlot() throws GameBoardException {
     SantoriniBoard board = SantoriniBoard.initiateBoard();
 
-    board.placeWorker(GridPosition.D1, new SantoriniWorker());
-    assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker()));
+    board.placeWorker(GridPosition.D1, new SantoriniWorker(1));
+    assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker(1)));
   }
 
   @Test
@@ -64,6 +73,44 @@ class SantoriniBoardTest {
     board.placeBlock(GridPosition.D1);
     board.placeBlock(GridPosition.D1);
     board.placeBlock(GridPosition.D1);
-    assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker()));
+    assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker(1)));
+  }
+
+  @ParameterizedTest
+  @CsvFileSource(resources = "/grid-data.csv", numLinesToSkip = 2)
+  void shouldMoveWorker(String santoriniGrid, int row, int column) throws GameBoardException {
+    SantoriniWorker worker = new SantoriniWorker(1);
+    SantoriniBoard board = SantoriniBoard.initiateBoard();
+
+    // Excluded from CSV for this test case
+    board.placeWorker(GridPosition.A1, worker);
+
+    GridPosition newPosition = GridPosition.valueOf(santoriniGrid);
+    board.moveWorker(newPosition, worker);
+
+    List<List<SantoriniSquare>> gameBoard = board.gameBoard;
+
+    // Assert worker has been removed from old square and placed on new square
+    assertTrue(gameBoard.get(row).get(column).getWorker().isPresent());
+    assertFalse(gameBoard.get(0).get(0).getWorker().isPresent());
+  }
+
+  @Test
+  void shouldThrowExceptionIfWorkerIdIsNotFound() {
+    SantoriniWorker worker = new SantoriniWorker(1);
+    SantoriniBoard board = SantoriniBoard.initiateBoard();
+
+    GameBoardException e = assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.B5, worker));
+    assertEquals("Worker does not exist on board", e.getMessage());
+  }
+
+  @Test
+  void shouldThrowExceptionIfTryToMoveWorkerToSameSpot() throws GameBoardException {
+    SantoriniWorker worker = new SantoriniWorker(1);
+    SantoriniBoard board = SantoriniBoard.initiateBoard();
+
+    board.placeWorker(GridPosition.A1, worker);
+    GameBoardException e = assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.A1, worker));
+    assertEquals("Cannot move worker to same square", e.getMessage());
   }
 }

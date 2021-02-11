@@ -1,5 +1,8 @@
 package com.terence.santorini.game;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum GridPosition {
 
   A1(0, 0),
@@ -42,5 +45,15 @@ public enum GridPosition {
 
   public int getColumnIndex() {
     return columnIndex;
+  }
+
+  public static GridPosition from(int row, int column) {
+    List<GridPosition> gridPositions = Arrays.asList(GridPosition.values());
+
+    return gridPositions
+        .stream()
+        .filter(gp -> gp.getRowIndex() == row && gp.getColumnIndex() == column)
+        .findFirst()
+        .orElseThrow();
   }
 }

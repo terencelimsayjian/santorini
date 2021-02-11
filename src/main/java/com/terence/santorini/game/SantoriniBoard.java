@@ -38,6 +38,53 @@ public class SantoriniBoard {
     List<SantoriniSquare> row = gameBoard.get(rowIndex);
     SantoriniSquare santoriniSquare = row.get(columnIndex);
 
+    for (int i = 0; i < gameBoard.size(); i++) {
+      List<SantoriniSquare> santoriniSquares = gameBoard.get(i);
+
+      for (int j = 0; j < santoriniSquares.size(); j++) {
+        SantoriniSquare square = santoriniSquares.get(j);
+
+        if (square.getWorker().isPresent()) {
+          SantoriniWorker santoriniWorker = square.getWorker().get();
+
+          if (santoriniWorker.getId() == worker.getId()) {
+            throw new GameBoardException("Worker already exsts");
+          }
+
+        }
+      }
+    }
+
     santoriniSquare.placeWorker(worker);
   }
+
+  public void moveWorker(GridPosition grid, SantoriniWorker worker) throws GameBoardException {
+    int rowIndex = grid.getRowIndex();
+    int columnIndex = grid.getColumnIndex();
+    List<SantoriniSquare> row = gameBoard.get(rowIndex);
+    SantoriniSquare squareToMoveTo = row.get(columnIndex);
+
+    for (int i = 0; i < gameBoard.size(); i++) {
+      List<SantoriniSquare> santoriniSquares = gameBoard.get(i);
+
+      for (int j = 0; j < santoriniSquares.size(); j++) {
+        SantoriniSquare square = santoriniSquares.get(j);
+
+        if (square.getWorker().isPresent()) {
+
+          if (GridPosition.from(i, j) == grid) {
+            throw new GameBoardException("Cannot move worker to same square");
+          }
+
+          square.removeWorker();
+          squareToMoveTo.placeWorker(worker);
+          return;
+        }
+      }
+    }
+
+    throw new GameBoardException("Worker does not exist on board");
+  }
+
+
 }

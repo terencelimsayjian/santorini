@@ -78,4 +78,7 @@ public class SantoriniSquare {
     return 0;
   }
 
+  public void removeWorker() {
+    santoriniWorker = null;
+  }
 }
