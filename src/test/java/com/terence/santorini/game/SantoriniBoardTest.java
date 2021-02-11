@@ -151,7 +151,7 @@ class SantoriniBoardTest {
       board.placeBlock(GridPosition.A1);
       board.placeWorker(GridPosition.A1, worker);
 
-      assertTrue(board.isWin());
+      assertTrue(board.isWin(worker));
     }
   }
 

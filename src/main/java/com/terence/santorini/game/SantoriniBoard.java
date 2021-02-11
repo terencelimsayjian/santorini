@@ -2,12 +2,14 @@ package com.terence.santorini.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SantoriniBoard {
   final List<List<SantoriniSquare>> gameBoard;
+  final HashMap<String, GridPosition> playerIdGridPositionLookup;
 
   private SantoriniBoard() {
     gameBoard = new ArrayList<>(5);
@@ -17,6 +19,8 @@ public class SantoriniBoard {
     gameBoard.add(2, Arrays.asList(SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare()));
     gameBoard.add(3, Arrays.asList(SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare()));
     gameBoard.add(4, Arrays.asList(SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare(), SantoriniSquare.initiateEmptySquare()));
+
+    playerIdGridPositionLookup = new HashMap<>();
   }
 
   public static SantoriniBoard initiateBoard() {
@@ -40,22 +44,11 @@ public class SantoriniBoard {
     List<SantoriniSquare> row = gameBoard.get(rowIndex);
     SantoriniSquare santoriniSquare = row.get(columnIndex);
 
-    for (int i = 0; i < gameBoard.size(); i++) {
-      List<SantoriniSquare> santoriniSquares = gameBoard.get(i);
-
-      for (int j = 0; j < santoriniSquares.size(); j++) {
-        SantoriniSquare square = santoriniSquares.get(j);
-
-        if (square.getWorker().isPresent()) {
-          SantoriniWorker santoriniWorker = square.getWorker().get();
-
-          if (santoriniWorker.getId().equals(worker.getId())) {
-            throw new GameBoardException("Worker already exsts");
-          }
-
-        }
-      }
+    if (playerIdGridPositionLookup.get(worker.getId()) != null) {
+      throw new GameBoardException("Worker already exsts");
     }
+
+    playerIdGridPositionLookup.put(worker.getId(), grid);
 
     santoriniSquare.placeWorker(worker);
   }
@@ -66,34 +59,26 @@ public class SantoriniBoard {
     List<SantoriniSquare> row = gameBoard.get(rowIndex);
     SantoriniSquare squareToMoveTo = row.get(columnIndex);
 
-    for (int i = 0; i < gameBoard.size(); i++) {
-      List<SantoriniSquare> santoriniSquares = gameBoard.get(i);
+    GridPosition currentGridPosition = playerIdGridPositionLookup.get(worker.getId());
 
-      for (int j = 0; j < santoriniSquares.size(); j++) {
-        SantoriniSquare square = santoriniSquares.get(j);
-
-        if (square.getWorker().isPresent()) {
-
-          GridPosition currentGridPosition = GridPosition.from(i, j).get();
-
-          if (currentGridPosition == newGridPosition) {
-            throw new GameBoardException("Cannot move worker to same square");
-          }
-
-          List<GridPosition> legalGridPositions = getLegalGridPositions(currentGridPosition);
-
-          if (!legalGridPositions.contains(newGridPosition)) {
-            throw new GameBoardException("Can only move worker one square");
-          }
-
-          square.removeWorker();
-          squareToMoveTo.placeWorker(worker);
-          return;
-        }
-      }
+    if (currentGridPosition == null) {
+      throw new GameBoardException("Worker does not exist on board");
     }
 
-    throw new GameBoardException("Worker does not exist on board");
+    if (currentGridPosition == newGridPosition) {
+      throw new GameBoardException("Cannot move worker to same square");
+    }
+
+    List<GridPosition> legalGridPositions = getLegalGridPositions(currentGridPosition);
+
+    if (!legalGridPositions.contains(newGridPosition)) {
+      throw new GameBoardException("Can only move worker one square");
+    }
+
+    SantoriniSquare square = getSquare(currentGridPosition);
+
+    square.removeWorker();
+    squareToMoveTo.placeWorker(worker);
   }
 
   private List<GridPosition> getLegalGridPositions(GridPosition currentGridPosition) {
@@ -117,20 +102,19 @@ public class SantoriniBoard {
         .collect(Collectors.toList());
   }
 
-  public boolean isWin() {
-    for (int i = 0; i < gameBoard.size(); i++) {
-      List<SantoriniSquare> santoriniSquares = gameBoard.get(i);
+  public boolean isWin(SantoriniWorker worker) {
+    GridPosition currentGridPosition = playerIdGridPositionLookup.get(worker.getId());
+    SantoriniSquare square = getSquare(currentGridPosition);
 
-      for (int j = 0; j < santoriniSquares.size(); j++) {
-        SantoriniSquare square = santoriniSquares.get(j);
-
-        if (square.getWorker().isPresent() && square.countLevels() == 3) {
-          return true;
-        }
-      }
+    if (square.getWorker().isPresent() && square.countLevels() == 3) {
+      return true;
     }
 
     return false;
+  }
+
+  private SantoriniSquare getSquare(GridPosition gridPosition) {
+    return gameBoard.get(gridPosition.getRowIndex()).get(gridPosition.getColumnIndex());
   }
 
 }
