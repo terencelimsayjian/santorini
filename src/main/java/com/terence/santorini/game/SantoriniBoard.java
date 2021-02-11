@@ -27,13 +27,17 @@ public class SantoriniBoard {
     return new SantoriniBoard();
   }
 
-  public void placeBlock(GridPosition grid) throws GameBoardException {
-    int rowIndex = grid.getRowIndex();
-    int columnIndex = grid.getColumnIndex();
+  // TODO: Cannot place block on square with player
+  public void placeBlock(GridPosition grid, SantoriniWorker worker) throws GameBoardException {
+    GridPosition workerGridPosition = playerIdGridPositionLookup.get(worker.getId());
 
-    List<SantoriniSquare> row = gameBoard.get(rowIndex);
-    SantoriniSquare santoriniSquare = row.get(columnIndex);
+    List<GridPosition> legalGridPositions = getLegalGridPositions(workerGridPosition);
 
+    if (!legalGridPositions.contains(grid)) {
+      throw new GameBoardException("Must place block on adjacent square");
+    }
+
+    SantoriniSquare santoriniSquare = getSquare(grid);
     santoriniSquare.placeNextBlock();
   }
 
@@ -53,6 +57,7 @@ public class SantoriniBoard {
     santoriniSquare.placeWorker(worker);
   }
 
+  // TODO: Cannot move up more than one level
   public void moveWorker(GridPosition newGridPosition, SantoriniWorker worker) throws GameBoardException {
     int rowIndex = newGridPosition.getRowIndex();
     int columnIndex = newGridPosition.getColumnIndex();
@@ -72,16 +77,17 @@ public class SantoriniBoard {
     List<GridPosition> legalGridPositions = getLegalGridPositions(currentGridPosition);
 
     if (!legalGridPositions.contains(newGridPosition)) {
-      throw new GameBoardException("Can only move worker one square");
+      throw new GameBoardException("Must move worker to adjacent square");
     }
 
     SantoriniSquare square = getSquare(currentGridPosition);
 
     square.removeWorker();
     squareToMoveTo.placeWorker(worker);
+    playerIdGridPositionLookup.put(worker.getId(), newGridPosition);
   }
 
-  private List<GridPosition> getLegalGridPositions(GridPosition currentGridPosition) {
+  List<GridPosition> getLegalGridPositions(GridPosition currentGridPosition) {
     int rowIndex = currentGridPosition.getRowIndex();
     int columnIndex = currentGridPosition.getColumnIndex();
 

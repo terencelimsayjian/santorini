@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,31 +17,51 @@ class SantoriniBoardTest {
   @Nested
   class PlaceBlocks {
     @ParameterizedTest
-    @CsvFileSource(resources = {"/grid-data.csv"}, numLinesToSkip = 1)
-    void shouldPlaceBlocksInCorrectLocationInList(String santoriniGrid, int row, int column) throws GameBoardException {
+    @CsvFileSource(resources = {"/legal-moves.csv"}, numLinesToSkip = 1)
+    void shouldAllowLegalBlockPlacement(String workerPosition, int row, int column, String newPosition) throws GameBoardException {
+      GridPosition placeBlockGridPosition = GridPosition.valueOf(newPosition);
+      GridPosition workerGridPosition = GridPosition.valueOf(workerPosition);
+
       SantoriniBoard board = SantoriniBoard.initiateBoard();
 
-      GridPosition grid = GridPosition.valueOf(santoriniGrid);
-      board.placeBlock(grid);
+      SantoriniWorker a1worker = new SantoriniWorker("A1");
+
+      board.placeWorker(workerGridPosition, a1worker);
+      board.placeBlock(placeBlockGridPosition, a1worker);
 
       List<List<SantoriniSquare>> gameBoard = board.gameBoard;
 
       assertEquals(1, gameBoard.get(row).get(column).countLevels());
     }
 
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/illegal-moves.csv"}, numLinesToSkip = 1)
+    void shouldThrowExceptionIfWorkerIsNotAdjacentToPlacedBlock(String workerPosition, String newPosition) throws GameBoardException {
+      GridPosition placeBlockGridPosition = GridPosition.valueOf(newPosition);
+      GridPosition workerGridPosition = GridPosition.valueOf(workerPosition);
+
+      SantoriniBoard board = SantoriniBoard.initiateBoard();
+
+      SantoriniWorker worker = new SantoriniWorker("A1");
+      board.placeWorker(workerGridPosition, worker);
+
+      GameBoardException e = assertThrows(GameBoardException.class, () -> board.placeBlock(placeBlockGridPosition, worker));
+      assertEquals("Must place block on adjacent square", e.getMessage());
+    }
+
     @Test
     void shouldAllowExceptionToBubbleUpIfBlockHeightExceeds() throws GameBoardException {
       SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniWorker worker = new SantoriniWorker("A1");
 
-      board.placeBlock(GridPosition.D1);
-      board.placeBlock(GridPosition.D1);
-      board.placeBlock(GridPosition.D1);
-      board.placeBlock(GridPosition.D1);
-      assertThrows(GameBoardException.class, () -> board.placeBlock(GridPosition.D1));
+      board.placeWorker(GridPosition.D2, worker);
+      board.placeBlock(GridPosition.D1, worker);
+      board.placeBlock(GridPosition.D1, worker);
+      board.placeBlock(GridPosition.D1, worker);
+      board.placeBlock(GridPosition.D1, worker);
+      assertThrows(GameBoardException.class, () -> board.placeBlock(GridPosition.D1, worker));
     }
-
   }
-
 
   @Nested
   class PlaceWorker {
@@ -75,11 +98,13 @@ class SantoriniBoardTest {
     @Test
     void shouldAllowExceptionToBubbleUpIfWorkerIsPlacedOnDome() throws GameBoardException {
       SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniWorker worker = new SantoriniWorker("A1");
 
-      board.placeBlock(GridPosition.D1);
-      board.placeBlock(GridPosition.D1);
-      board.placeBlock(GridPosition.D1);
-      board.placeBlock(GridPosition.D1);
+      board.placeWorker(GridPosition.D2, worker);
+      board.placeBlock(GridPosition.D1, worker);
+      board.placeBlock(GridPosition.D1, worker);
+      board.placeBlock(GridPosition.D1, worker);
+      board.placeBlock(GridPosition.D1, worker);
       assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker("1")));
     }
   }
@@ -87,23 +112,24 @@ class SantoriniBoardTest {
   @Nested
   class MoveWorker {
     @ParameterizedTest
-    @CsvFileSource(resources = "/grid-data.csv", numLinesToSkip = 2)
-    void shouldMoveWorker(String newGridPosition, int row, int column, String startingGridPosition) throws GameBoardException {
+    @CsvFileSource(resources = "/legal-moves.csv", numLinesToSkip = 1)
+    void shouldMoveWorkerIfLegal(String workerPosition, int row, int column, String newPosition) throws GameBoardException {
       SantoriniWorker worker = new SantoriniWorker("1");
       SantoriniBoard board = SantoriniBoard.initiateBoard();
 
-      // Excluded from CSV for this test case
-      GridPosition startingPosition = GridPosition.valueOf(startingGridPosition);
-      board.placeWorker(startingPosition, worker);
+      GridPosition newGridPosition = GridPosition.valueOf(newPosition);
+      GridPosition originalGridPosition = GridPosition.valueOf(workerPosition);
 
-      GridPosition newPosition = GridPosition.valueOf(newGridPosition);
-      board.moveWorker(newPosition, worker);
+      board.placeWorker(originalGridPosition, worker);
+      board.moveWorker(newGridPosition, worker);
 
       List<List<SantoriniSquare>> gameBoard = board.gameBoard;
 
       // Assert worker has been removed from old square and placed on new square
       assertTrue(gameBoard.get(row).get(column).getWorker().isPresent());
-      assertFalse(gameBoard.get(0).get(0).getWorker().isPresent());
+      int oldRow = originalGridPosition.getRowIndex();
+      int oldColumn = originalGridPosition.getColumnIndex();
+      assertFalse(gameBoard.get(oldRow).get(oldColumn).getWorker().isPresent());
     }
 
     @Test
@@ -125,34 +151,66 @@ class SantoriniBoardTest {
       assertEquals("Cannot move worker to same square", e.getMessage());
     }
 
-    @Test
-    void shouldThrowExceptionIfTryToMoveWorkerMoreThanOneSpotAway() throws GameBoardException {
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/illegal-moves.csv"}, numLinesToSkip = 1)
+    void shouldThrowExceptionIfTryToMoveWorkerMoreThanOneSpotAway(String workerPosition, String newPosition) throws GameBoardException {
       SantoriniWorker worker = new SantoriniWorker("1");
       SantoriniBoard board = SantoriniBoard.initiateBoard();
 
-      // Excluded from CSV for this test case
-      board.placeWorker(GridPosition.A1, worker);
+      GridPosition originalWorkerGridPosition = GridPosition.valueOf(workerPosition);
+      GridPosition newGridPosition = GridPosition.valueOf(newPosition);
 
-      GameBoardException e = assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.A3, worker));
-      assertEquals("Can only move worker one square", e.getMessage());
+      board.placeWorker(originalWorkerGridPosition, worker);
 
+      GameBoardException e = assertThrows(GameBoardException.class, () -> board.moveWorker(newGridPosition, worker));
+      assertEquals("Must move worker to adjacent square", e.getMessage());
     }
   }
 
   @Nested
   class CheckWin {
     @Test
-    void name() throws GameBoardException {
-      SantoriniWorker worker = new SantoriniWorker("1");
+    void shouldReturnTrueWithBasicWinCondition() throws GameBoardException {
       SantoriniBoard board = SantoriniBoard.initiateBoard();
 
-      board.placeBlock(GridPosition.A1);
-      board.placeBlock(GridPosition.A1);
-      board.placeBlock(GridPosition.A1);
-      board.placeWorker(GridPosition.A1, worker);
+      SantoriniWorker worker = new SantoriniWorker("A1");
+      board.placeWorker(GridPosition.A2, worker);
+      board.placeBlock(GridPosition.A1, worker);
+      board.placeBlock(GridPosition.A1, worker);
+      board.placeBlock(GridPosition.A1, worker);
+      board.moveWorker(GridPosition.A1, worker);
 
       assertTrue(board.isWin(worker));
     }
   }
 
+  void generateData() {
+    SantoriniBoard santoriniBoard = SantoriniBoard.initiateBoard();
+
+    List<GridPosition> gridPositions = Arrays.asList(GridPosition.values());
+
+    for (int i = 0; i < gridPositions.size(); i++) {
+
+      GridPosition gridPosition = gridPositions.get(i);
+
+
+      List<GridPosition> fullList = new ArrayList<>(gridPositions);
+
+      List<GridPosition> legalGridPositions = santoriniBoard.getLegalGridPositions(gridPosition);
+
+      List<GridPosition> collect = fullList.stream()
+          .filter(a -> legalGridPositions.contains(a))
+          .collect(Collectors.toList());
+
+      for (int j = 0; j < collect.size(); j++) {
+        GridPosition newPos = collect.get(j);
+        if (!gridPosition.name().equals(newPos.name())) {
+          System.out.println(gridPosition.name() + "," + newPos.getRowIndex() + "," + newPos.getColumnIndex() + "," + newPos.name());
+
+        }
+
+      }
+    }
+
+  }
 }
