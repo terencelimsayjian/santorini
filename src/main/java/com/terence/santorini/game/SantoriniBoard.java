@@ -117,5 +117,20 @@ public class SantoriniBoard {
         .collect(Collectors.toList());
   }
 
+  public boolean isWin() {
+    for (int i = 0; i < gameBoard.size(); i++) {
+      List<SantoriniSquare> santoriniSquares = gameBoard.get(i);
+
+      for (int j = 0; j < santoriniSquares.size(); j++) {
+        SantoriniSquare square = santoriniSquares.get(j);
+
+        if (square.getWorker().isPresent() && square.countLevels() == 3) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
 
 }

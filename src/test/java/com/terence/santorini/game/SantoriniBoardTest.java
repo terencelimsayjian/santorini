@@ -139,4 +139,20 @@ class SantoriniBoardTest {
     }
   }
 
+  @Nested
+  class CheckWin {
+    @Test
+    void name() throws GameBoardException {
+      SantoriniWorker worker = new SantoriniWorker("1");
+      SantoriniBoard board = SantoriniBoard.initiateBoard();
+
+      board.placeBlock(GridPosition.A1);
+      board.placeBlock(GridPosition.A1);
+      board.placeBlock(GridPosition.A1);
+      board.placeWorker(GridPosition.A1, worker);
+
+      assertTrue(board.isWin());
+    }
+  }
+
 }
