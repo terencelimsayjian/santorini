@@ -80,7 +80,7 @@ public class SantoriniBoard {
             throw new GameBoardException("Cannot move worker to same square");
           }
 
-          List<GridPosition> legalGridPositions = getLegalGridPOsitions(currentGridPosition);
+          List<GridPosition> legalGridPositions = getLegalGridPositions(currentGridPosition);
 
           if (!legalGridPositions.contains(newGridPosition)) {
             throw new GameBoardException("Can only move worker one square");
@@ -96,7 +96,7 @@ public class SantoriniBoard {
     throw new GameBoardException("Worker does not exist on board");
   }
 
-  private List<GridPosition> getLegalGridPOsitions(GridPosition currentGridPosition) {
+  private List<GridPosition> getLegalGridPositions(GridPosition currentGridPosition) {
     int rowIndex = currentGridPosition.getRowIndex();
     int columnIndex = currentGridPosition.getColumnIndex();
 
