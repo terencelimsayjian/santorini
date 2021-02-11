@@ -60,32 +60,36 @@ public class SantoriniBoard {
     santoriniSquare.placeWorker(worker);
   }
 
-  // TODO: Cannot move up more than one level
   public void moveWorker(GridPosition newGridPosition, SantoriniWorker worker) throws GameBoardException {
     int rowIndex = newGridPosition.getRowIndex();
     int columnIndex = newGridPosition.getColumnIndex();
     List<SantoriniSquare> row = gameBoard.get(rowIndex);
     SantoriniSquare squareToMoveTo = row.get(columnIndex);
 
-    GridPosition currentGridPosition = playerIdGridPositionLookup.get(worker.getId());
+    GridPosition currentWorkerPosition = playerIdGridPositionLookup.get(worker.getId());
 
-    if (currentGridPosition == null) {
+    if (currentWorkerPosition == null) {
       throw new GameBoardException("Worker does not exist on board");
     }
 
-    if (currentGridPosition == newGridPosition) {
+    if (currentWorkerPosition == newGridPosition) {
       throw new GameBoardException("Cannot move worker to same square");
     }
 
-    List<GridPosition> legalGridPositions = getLegalGridPositions(currentGridPosition);
+    List<GridPosition> legalGridPositions = getLegalGridPositions(currentWorkerPosition);
 
     if (!legalGridPositions.contains(newGridPosition)) {
       throw new GameBoardException("Must move worker to adjacent square");
     }
 
-    SantoriniSquare square = getSquare(currentGridPosition);
+    SantoriniSquare currentWorkerSquare = getSquare(currentWorkerPosition);
+    SantoriniSquare newSquare = getSquare(newGridPosition);
 
-    square.removeWorker();
+    if (newSquare.countLevels() - currentWorkerSquare.countLevels() > 1) {
+      throw new GameBoardException("Worker can move up maximum of one level higher");
+    }
+
+    currentWorkerSquare.removeWorker();
     squareToMoveTo.placeWorker(worker);
     playerIdGridPositionLookup.put(worker.getId(), newGridPosition);
   }
@@ -125,5 +129,4 @@ public class SantoriniBoard {
   private SantoriniSquare getSquare(GridPosition gridPosition) {
     return gameBoard.get(gridPosition.getRowIndex()).get(gridPosition.getColumnIndex());
   }
-
 }
