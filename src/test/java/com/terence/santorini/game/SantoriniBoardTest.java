@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +61,18 @@ class SantoriniBoardTest {
       board.placeBlock(GridPosition.D1, worker);
       board.placeBlock(GridPosition.D1, worker);
       assertThrows(GameBoardException.class, () -> board.placeBlock(GridPosition.D1, worker));
+    }
+
+    @ParameterizedTest
+    @EnumSource(GridPosition.class)
+    void shouldThrowExceptionIfPlaceBlockOnSquareWithAWorker(GridPosition gridPosition) throws GameBoardException {
+      SantoriniBoard board = SantoriniBoard.initiateBoard();
+
+      SantoriniWorker worker = new SantoriniWorker("A1");
+      board.placeWorker(gridPosition, worker);
+
+      GameBoardException e = assertThrows(GameBoardException.class, () -> board.placeBlock(gridPosition, worker));
+      assertEquals("Worker already occupies square", e.getMessage());
     }
   }
 

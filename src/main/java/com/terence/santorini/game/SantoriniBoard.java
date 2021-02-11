@@ -27,9 +27,12 @@ public class SantoriniBoard {
     return new SantoriniBoard();
   }
 
-  // TODO: Cannot place block on square with player
   public void placeBlock(GridPosition grid, SantoriniWorker worker) throws GameBoardException {
     GridPosition workerGridPosition = playerIdGridPositionLookup.get(worker.getId());
+
+    if (workerGridPosition == grid) {
+      throw new GameBoardException("Worker already occupies square");
+    }
 
     List<GridPosition> legalGridPositions = getLegalGridPositions(workerGridPosition);
 
