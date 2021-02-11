@@ -1,8 +1,6 @@
-package com.terence.santorini.game;
+package com.terence.santorini.gamelogic;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SantoriniGameTest {
 

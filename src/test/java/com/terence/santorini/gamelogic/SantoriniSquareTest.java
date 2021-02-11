@@ -1,4 +1,4 @@
-package com.terence.santorini.game;
+package com.terence.santorini.gamelogic;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

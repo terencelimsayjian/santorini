@@ -1,4 +1,4 @@
-package com.terence.santorini.game;
+package com.terence.santorini.gamelogic;
 
 public class SantoriniWorker {
   private final String id;
