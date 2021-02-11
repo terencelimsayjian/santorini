@@ -2,6 +2,7 @@ package com.terence.santorini.game;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public enum GridPosition {
 
@@ -47,13 +48,12 @@ public enum GridPosition {
     return columnIndex;
   }
 
-  public static GridPosition from(int row, int column) {
+  public static Optional<GridPosition> from(int row, int column) {
     List<GridPosition> gridPositions = Arrays.asList(GridPosition.values());
 
     return gridPositions
         .stream()
         .filter(gp -> gp.getRowIndex() == row && gp.getColumnIndex() == column)
-        .findFirst()
-        .orElseThrow();
+        .findFirst();
   }
 }

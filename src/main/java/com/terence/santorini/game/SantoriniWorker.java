@@ -1,13 +1,13 @@
 package com.terence.santorini.game;
 
 public class SantoriniWorker {
-  private final int id;
+  private final String id;
 
-  public SantoriniWorker(int id) {
+  public SantoriniWorker(String id) {
     this.id = id;
   }
 
-  public int getId() {
+  public String getId() {
     return id;
   }
 }

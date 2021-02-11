@@ -10,7 +10,6 @@ class SantoriniGameTest {
   @Test
   void name() {
 
-    SantoriniGame game = SantoriniGame.newGame();
 
 
 
