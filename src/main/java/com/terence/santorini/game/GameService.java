@@ -5,7 +5,7 @@ import com.terence.santorini.gamelogic.GameBoardException;
 import com.terence.santorini.gamelogic.GameSerializer;
 import com.terence.santorini.gamelogic.GridPosition;
 import com.terence.santorini.gamelogic.JsonGameRepresentation;
-import com.terence.santorini.gamelogic.JsonGameRepresentationToGameBoardMapper;
+import com.terence.santorini.gamelogic.JsonGameBoardMapper;
 import com.terence.santorini.gamelogic.SantoriniBoard;
 import com.terence.santorini.gamelogic.SantoriniWorker;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ public class GameService {
 
   private final GameRepository gameRepository;
   private final GameSerializer gameSerializer;
-  private final JsonGameRepresentationToGameBoardMapper mapper;
+  private final JsonGameBoardMapper mapper;
 
-  public GameService(GameRepository gameRepository, GameSerializer gameSerializer, JsonGameRepresentationToGameBoardMapper mapper) {
+  public GameService(GameRepository gameRepository, GameSerializer gameSerializer, JsonGameBoardMapper mapper) {
     this.gameRepository = gameRepository;
     this.gameSerializer = gameSerializer;
     this.mapper = mapper;

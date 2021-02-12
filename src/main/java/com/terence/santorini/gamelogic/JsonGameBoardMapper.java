@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JsonGameRepresentationToGameBoardMapper {
+public class JsonGameBoardMapper {
 
-  public JsonGameRepresentationToGameBoardMapper() {
+  public JsonGameBoardMapper() {
   }
 
   public JsonGameRepresentation gameboardToJsonRepresentation(SantoriniBoard santoriniBoard) {
