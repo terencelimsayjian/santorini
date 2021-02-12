@@ -80,7 +80,7 @@ class SantoriniSquareTest {
     void shouldCountEmptySquare() {
       SantoriniSquare santoriniSquare = SantoriniSquare.initiateEmptySquare();
 
-      assertEquals(0, santoriniSquare.countLevels());
+      assertEquals(0, santoriniSquare.getLevels());
     }
 
     @Test
@@ -89,7 +89,7 @@ class SantoriniSquareTest {
 
       santoriniSquare.placeNextBlock();
 
-      assertEquals(1, santoriniSquare.countLevels());
+      assertEquals(1, santoriniSquare.getLevels());
     }
 
     @Test
@@ -99,7 +99,7 @@ class SantoriniSquareTest {
       santoriniSquare.placeNextBlock();
       santoriniSquare.placeNextBlock();
 
-      assertEquals(2, santoriniSquare.countLevels());
+      assertEquals(2, santoriniSquare.getLevels());
     }
 
     @Test
@@ -110,7 +110,7 @@ class SantoriniSquareTest {
       santoriniSquare.placeNextBlock();
       santoriniSquare.placeNextBlock();
 
-      assertEquals(3, santoriniSquare.countLevels());
+      assertEquals(3, santoriniSquare.getLevels());
     }
 
     @Test
@@ -122,7 +122,7 @@ class SantoriniSquareTest {
       santoriniSquare.placeNextBlock();
       santoriniSquare.placeNextBlock();
 
-      assertEquals(4, santoriniSquare.countLevels());
+      assertEquals(4, santoriniSquare.getLevels());
     }
 
     @Test

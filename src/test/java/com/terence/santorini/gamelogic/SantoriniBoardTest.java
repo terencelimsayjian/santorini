@@ -11,7 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SantoriniBoardTest {
 
@@ -32,7 +35,7 @@ class SantoriniBoardTest {
 
       List<List<SantoriniSquare>> gameBoard = board.gameBoard;
 
-      assertEquals(1, gameBoard.get(row).get(column).countLevels());
+      assertEquals(1, gameBoard.get(row).get(column).getLevels());
     }
 
     @ParameterizedTest
@@ -108,7 +111,7 @@ class SantoriniBoardTest {
       assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker("1")));
     }
 
-    @Test
+    @ParameterizedTest
     void shouldAllowExceptionToBubbleUpIfWorkerIsPlacedOnDome() throws GameBoardException {
       SantoriniBoard board = SantoriniBoard.initiateBoard();
       SantoriniWorker worker = new SantoriniWorker("A1");
@@ -276,6 +279,5 @@ class SantoriniBoardTest {
         }
       }
     }
-
   }
 }

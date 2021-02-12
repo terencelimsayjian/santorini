@@ -1,5 +1,7 @@
 package com.terence.santorini.gamelogic;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,8 +10,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SantoriniBoard {
-  final List<List<SantoriniSquare>> gameBoard;
-  final HashMap<String, GridPosition> playerIdGridPositionLookup;
+  List<List<SantoriniSquare>> gameBoard;
+  HashMap<String, GridPosition> playerIdGridPositionLookup;
+
+  ObjectMapper objectMapper;
 
   private SantoriniBoard() {
     gameBoard = new ArrayList<>(5);
@@ -25,6 +29,12 @@ public class SantoriniBoard {
 
   public static SantoriniBoard initiateBoard() {
     return new SantoriniBoard();
+  }
+
+  public static SantoriniBoard fromGameInProgress(List<List<SantoriniSquare>> gameBoardInProgress) {
+    SantoriniBoard santoriniBoard = new SantoriniBoard();
+    santoriniBoard.gameBoard = gameBoardInProgress;
+    return santoriniBoard;
   }
 
   public void placeBlock(GridPosition grid, SantoriniWorker worker) throws GameBoardException {
@@ -85,7 +95,7 @@ public class SantoriniBoard {
     SantoriniSquare currentWorkerSquare = getSquare(currentWorkerPosition);
     SantoriniSquare newSquare = getSquare(newGridPosition);
 
-    if (newSquare.countLevels() - currentWorkerSquare.countLevels() > 1) {
+    if (newSquare.getLevels() - currentWorkerSquare.getLevels() > 1) {
       throw new GameBoardException("Worker can move up maximum of one level higher");
     }
 
@@ -119,7 +129,7 @@ public class SantoriniBoard {
     GridPosition currentGridPosition = playerIdGridPositionLookup.get(worker.getId());
     SantoriniSquare square = getSquare(currentGridPosition);
 
-    if (square.getWorker().isPresent() && square.countLevels() == 3) {
+    if (square.getWorker().isPresent() && square.getLevels() == 3) {
       return true;
     }
 

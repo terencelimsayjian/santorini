@@ -1,6 +1,7 @@
 package com.terence.santorini.game;
 
 public class GameService {
+
   public void makePlayerMove(GameCommand gameCommand) {
 
     // Place worker

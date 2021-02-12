@@ -4,10 +4,7 @@ import java.util.Optional;
 
 public class SantoriniSquare {
   private SantoriniWorker santoriniWorker;
-  private boolean firstLevel = false;
-  private boolean secondLevel = false;
-  private boolean thirdLevel = false;
-  private boolean dome = false;
+  private Integer levels = 0;
 
   private SantoriniSquare() {
   }
@@ -17,7 +14,7 @@ public class SantoriniSquare {
   }
 
   public void placeWorker(SantoriniWorker worker) throws GameBoardException {
-    if (dome == true) {
+    if (isDome()) {
       throw new GameBoardException("Cannot place worker on a dome");
     }
 
@@ -33,49 +30,19 @@ public class SantoriniSquare {
   }
 
   public void placeNextBlock() throws GameBoardException {
-    if (dome) {
+    if (isDome()) {
       throw new GameBoardException("Maximum block capacity reached");
     }
 
-    if (!firstLevel) {
-      firstLevel = true;
-      return;
-    }
-
-    if (!secondLevel) {
-      secondLevel = true;
-      return;
-    }
-
-    if (!thirdLevel) {
-      thirdLevel = true;
-      return;
-    }
-
-    if (!dome) {
-      dome = true;
-      return;
-    }
+    levels++;
   }
 
-  public int countLevels() {
-    if (dome) {
-      return 4;
-    }
+  private boolean isDome() {
+    return levels >= 4;
+  }
 
-    if (thirdLevel) {
-      return 3;
-    }
-
-    if (secondLevel) {
-      return 2;
-    }
-
-    if (firstLevel) {
-      return 1;
-    }
-
-    return 0;
+  public int getLevels() {
+    return levels;
   }
 
   public void removeWorker() {
