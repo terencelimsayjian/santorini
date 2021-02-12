@@ -13,8 +13,6 @@ public class SantoriniBoard {
   List<List<SantoriniSquare>> gameBoard;
   HashMap<String, GridPosition> playerIdGridPositionLookup;
 
-  ObjectMapper objectMapper;
-
   private SantoriniBoard() {
     gameBoard = new ArrayList<>(5);
 

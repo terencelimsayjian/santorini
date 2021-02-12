@@ -1,7 +1,8 @@
-package com.terence.santorini.game;
+package com.terence.santorini.gamelogic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.terence.santorini.gamelogic.JsonGameRepresentation;
 import org.springframework.stereotype.Component;
 
 @Component

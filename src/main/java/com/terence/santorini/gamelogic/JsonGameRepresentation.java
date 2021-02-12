@@ -1,4 +1,4 @@
-package com.terence.santorini.game;
+package com.terence.santorini.gamelogic;
 
 import lombok.Getter;
 import lombok.Setter;

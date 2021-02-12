@@ -9,8 +9,18 @@ public class SantoriniSquare {
   private SantoriniSquare() {
   }
 
+  private SantoriniSquare(SantoriniWorker santoriniWorker, Integer levels) {
+    this.santoriniWorker = santoriniWorker;
+    this.levels = levels;
+  }
+
   public static SantoriniSquare initiateEmptySquare() {
     return new SantoriniSquare();
+  }
+
+  static SantoriniSquare fromExistingSquare(String workerId, Integer levels) {
+    SantoriniWorker worker = workerId != null ? new SantoriniWorker(workerId): null;
+    return new SantoriniSquare(worker, levels);
   }
 
   public void placeWorker(SantoriniWorker worker) throws GameBoardException {

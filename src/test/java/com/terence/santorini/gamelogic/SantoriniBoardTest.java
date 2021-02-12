@@ -111,7 +111,7 @@ class SantoriniBoardTest {
       assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker("1")));
     }
 
-    @ParameterizedTest
+    @Test
     void shouldAllowExceptionToBubbleUpIfWorkerIsPlacedOnDome() throws GameBoardException {
       SantoriniBoard board = SantoriniBoard.initiateBoard();
       SantoriniWorker worker = new SantoriniWorker("A1");

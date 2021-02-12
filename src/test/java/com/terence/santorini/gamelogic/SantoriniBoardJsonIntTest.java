@@ -1,9 +1,8 @@
-package com.terence.santorini.game;
+package com.terence.santorini.gamelogic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.terence.santorini.gamelogic.GameBoardException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class GameBoardSerializerIntTest {
+class GameSerializerIntegrationTest {
 
   @Autowired
   GameSerializer gameSerializer;
