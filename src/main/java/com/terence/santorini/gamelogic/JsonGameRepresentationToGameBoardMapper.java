@@ -37,7 +37,7 @@ public class JsonGameRepresentationToGameBoardMapper {
     return new JsonSquareRepresentation(santoriniSquare.getLevels(), workerId);
   }
 
-  public SantoriniBoard jsonRepresntationToGameboard(JsonGameRepresentation jsonGameRepresentation) {
+  public SantoriniBoard jsonRepresentationToGameboard(JsonGameRepresentation jsonGameRepresentation) {
 
     SantoriniBoard santoriniBoard = SantoriniBoard.initiateBoard();
 

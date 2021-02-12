@@ -83,7 +83,7 @@ class JsonGameRepresentationToGameBoardMapperTest {
       JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
       jsonGameRepresentation.setGameboard(jsonSquares);
 
-      SantoriniBoard santoriniBoard = mapper.jsonRepresntationToGameboard(jsonGameRepresentation);
+      SantoriniBoard santoriniBoard = mapper.jsonRepresentationToGameboard(jsonGameRepresentation);
 
       santoriniBoard.gameBoard.forEach(row -> {
         row.forEach(square -> {
@@ -105,7 +105,7 @@ class JsonGameRepresentationToGameBoardMapperTest {
       JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
       jsonGameRepresentation.setGameboard(jsonSquares);
 
-      SantoriniBoard santoriniBoard = mapper.jsonRepresntationToGameboard(jsonGameRepresentation);
+      SantoriniBoard santoriniBoard = mapper.jsonRepresentationToGameboard(jsonGameRepresentation);
 
       List<List<SantoriniSquare>> gameBoard = santoriniBoard.gameBoard;
 

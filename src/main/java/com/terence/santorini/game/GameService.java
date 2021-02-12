@@ -1,36 +1,59 @@
 package com.terence.santorini.game;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.terence.santorini.gamelogic.GameBoardException;
 import com.terence.santorini.gamelogic.GameSerializer;
+import com.terence.santorini.gamelogic.GridPosition;
+import com.terence.santorini.gamelogic.JsonGameRepresentation;
+import com.terence.santorini.gamelogic.JsonGameRepresentationToGameBoardMapper;
+import com.terence.santorini.gamelogic.SantoriniBoard;
+import com.terence.santorini.gamelogic.SantoriniWorker;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class GameService {
 
-  GameRepository gameRepository;
+  private final GameRepository gameRepository;
+  private final GameSerializer gameSerializer;
+  private final JsonGameRepresentationToGameBoardMapper mapper;
 
-  GameSerializer gameSerializer;
-
-  public GameService(GameRepository gameRepository, GameSerializer gameSerializer) {
+  public GameService(GameRepository gameRepository, GameSerializer gameSerializer, JsonGameRepresentationToGameBoardMapper mapper) {
     this.gameRepository = gameRepository;
     this.gameSerializer = gameSerializer;
+    this.mapper = mapper;
   }
 
   public void makePlayerMove(GameCommand gameCommand) throws JsonProcessingException {
+    // Game should be created? I think game should be created when ppl join the room, not over here
+    // This should be player actions
 
-    // Find game
-    // JSON to gameboard
+    Optional<Game> optionalGame = gameRepository.findById("ID");
 
-    // map json game representation to game board
+    if (optionalGame.isEmpty()) {
+      throw new RuntimeException();
+    }
 
-    // try to apply move
+    Game game = optionalGame.get();
 
-    // serialize back
+    JsonGameRepresentation jsonGameRepresentation = gameSerializer.jsonToBean(game.getGameBoard());
 
-    // save
+    SantoriniBoard santoriniBoard = mapper.jsonRepresentationToGameboard(jsonGameRepresentation);
 
-    // Return response
+    try {
+      santoriniBoard.moveWorker(GridPosition.A1, new SantoriniWorker("A1"));
+    } catch (GameBoardException e) {
+      e.printStackTrace();
+    }
 
+    JsonGameRepresentation updatedJsonRep = mapper.gameboardToJsonRepresentation(santoriniBoard);
+
+    String updatedGameboardString = gameSerializer.beanToJson(updatedJsonRep);
+
+    game.setGameBoard(updatedGameboardString);
+
+    gameRepository.save(game);
 
     // Place worker
     // Move worker
