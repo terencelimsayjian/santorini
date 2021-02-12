@@ -1,6 +1,5 @@
 package com.terence.santorini.game;
 
-import com.terence.santorini.gamelogic.SantoriniBoard;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;

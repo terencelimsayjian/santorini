@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SantoriniBoardTest {
+class SantoriniGameBoardTest {
 
   @Nested
   class PlaceBlocks {
@@ -26,14 +26,14 @@ class SantoriniBoardTest {
       GridPosition placeBlockGridPosition = GridPosition.valueOf(newPosition);
       GridPosition workerGridPosition = GridPosition.valueOf(workerPosition);
 
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       SantoriniWorker a1worker = new SantoriniWorker("A1");
 
       board.placeWorker(workerGridPosition, a1worker);
       board.placeBlock(placeBlockGridPosition, a1worker);
 
-      List<List<SantoriniSquare>> gameBoard = board.gameBoard;
+      List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
 
       assertEquals(1, gameBoard.get(row).get(column).getLevels());
     }
@@ -44,7 +44,7 @@ class SantoriniBoardTest {
       GridPosition placeBlockGridPosition = GridPosition.valueOf(newPosition);
       GridPosition workerGridPosition = GridPosition.valueOf(workerPosition);
 
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       SantoriniWorker worker = new SantoriniWorker("A1");
       board.placeWorker(workerGridPosition, worker);
@@ -55,7 +55,7 @@ class SantoriniBoardTest {
 
     @Test
     void shouldAllowExceptionToBubbleUpIfBlockHeightExceeds() throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
       SantoriniWorker worker = new SantoriniWorker("A1");
 
       board.placeWorker(GridPosition.D2, worker);
@@ -69,7 +69,7 @@ class SantoriniBoardTest {
     @ParameterizedTest
     @EnumSource(GridPosition.class)
     void shouldThrowExceptionIfPlaceBlockOnSquareWithAWorker(GridPosition gridPosition) throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       SantoriniWorker worker = new SantoriniWorker("A1");
       board.placeWorker(gridPosition, worker);
@@ -84,19 +84,19 @@ class SantoriniBoardTest {
     @ParameterizedTest
     @CsvFileSource(resources = {"/grid-data.csv"}, numLinesToSkip = 1)
     void shouldPlaceWorkerInCorrectLocationInList(String santoriniGrid, int row, int column) throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       GridPosition grid = GridPosition.valueOf(santoriniGrid);
       board.placeWorker(grid, new SantoriniWorker("1"));
 
-      List<List<SantoriniSquare>> gameBoard = board.gameBoard;
+      List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
 
       assertTrue(gameBoard.get(row).get(column).getWorker().isPresent());
     }
 
     @Test
     void shouldThrowExceptionIfPlacingWorkerThatAlreadyExistsOnTheBoard() throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       board.placeWorker(GridPosition.D1, new SantoriniWorker("1"));
       GameBoardException e = assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker("1")));
@@ -105,7 +105,7 @@ class SantoriniBoardTest {
 
     @Test
     void shouldAllowExceptionToBubbleUpIfWorkerIsPlacedInOccupiedSlot() throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       board.placeWorker(GridPosition.D1, new SantoriniWorker("1"));
       assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, new SantoriniWorker("1")));
@@ -113,7 +113,7 @@ class SantoriniBoardTest {
 
     @Test
     void shouldAllowExceptionToBubbleUpIfWorkerIsPlacedOnDome() throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
       SantoriniWorker worker = new SantoriniWorker("A1");
 
       board.placeWorker(GridPosition.D2, worker);
@@ -131,7 +131,7 @@ class SantoriniBoardTest {
     @CsvFileSource(resources = "/legal-moves.csv", numLinesToSkip = 1)
     void shouldMoveWorkerIfLegal(String workerPosition, int row, int column, String newPosition) throws GameBoardException {
       SantoriniWorker worker = new SantoriniWorker("A1");
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       GridPosition newGridPosition = GridPosition.valueOf(newPosition);
       GridPosition originalGridPosition = GridPosition.valueOf(workerPosition);
@@ -139,7 +139,7 @@ class SantoriniBoardTest {
       board.placeWorker(originalGridPosition, worker);
       board.moveWorker(newGridPosition, worker);
 
-      List<List<SantoriniSquare>> gameBoard = board.gameBoard;
+      List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
 
       // Assert worker has been removed from old square and placed on new square
       assertTrue(gameBoard.get(row).get(column).getWorker().isPresent());
@@ -152,7 +152,7 @@ class SantoriniBoardTest {
     @CsvFileSource(resources = {"/illegal-moves.csv"}, numLinesToSkip = 1)
     void shouldThrowExceptionIfTryToMoveWorkerMoreThanOneSpotAway(String workerPosition, String newPosition) throws GameBoardException {
       SantoriniWorker worker = new SantoriniWorker("1");
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       GridPosition originalWorkerGridPosition = GridPosition.valueOf(workerPosition);
       GridPosition newGridPosition = GridPosition.valueOf(newPosition);
@@ -166,7 +166,7 @@ class SantoriniBoardTest {
     @Test
     void shouldThrowExceptionIfWorkerAttemptsToMoveUpMoreThanOneBlockHeight() throws GameBoardException {
       SantoriniWorker worker = new SantoriniWorker("A1");
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       board.placeWorker(GridPosition.B3, worker);
       board.placeBlock(GridPosition.B4, worker);
@@ -179,7 +179,7 @@ class SantoriniBoardTest {
     @Test
     void shouldThrowExceptionIfWorkerIdIsNotFound() {
       SantoriniWorker worker = new SantoriniWorker("1");
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       GameBoardException e = assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.B5, worker));
       assertEquals("Worker does not exist on board", e.getMessage());
@@ -188,7 +188,7 @@ class SantoriniBoardTest {
     @Test
     void shouldThrowExceptionIfTryToMoveWorkerToSameSpot() throws GameBoardException {
       SantoriniWorker worker = new SantoriniWorker("1");
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       board.placeWorker(GridPosition.A1, worker);
       GameBoardException e = assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.A1, worker));
@@ -200,7 +200,7 @@ class SantoriniBoardTest {
   class CheckWin {
     @Test
     void shouldReturnTrueWithBasicWinCondition() throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       SantoriniWorker worker = new SantoriniWorker("A1");
       board.placeWorker(GridPosition.A1, worker);
@@ -221,7 +221,7 @@ class SantoriniBoardTest {
 
     @Test
     void shouldNotReturnTrueWithWorkerOnLevel2() throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       SantoriniWorker worker = new SantoriniWorker("A1");
       board.placeWorker(GridPosition.A1, worker);
@@ -237,7 +237,7 @@ class SantoriniBoardTest {
 
     @Test
     void shouldNotReturnTrueWithWorkerOnLevel1() throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       SantoriniWorker worker = new SantoriniWorker("A1");
       board.placeWorker(GridPosition.A1, worker);
@@ -249,7 +249,7 @@ class SantoriniBoardTest {
 
     @Test
     void shouldNotReturnTrueWithWorkerOnLevel0() throws GameBoardException {
-      SantoriniBoard board = SantoriniBoard.initiateBoard();
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       SantoriniWorker worker = new SantoriniWorker("A1");
       board.placeWorker(GridPosition.A1, worker);
@@ -259,14 +259,14 @@ class SantoriniBoardTest {
   }
 
   void generateData() {
-    SantoriniBoard santoriniBoard = SantoriniBoard.initiateBoard();
+    SantoriniGameBoard santoriniGameBoard = SantoriniGameBoard.initiateBoard();
     List<GridPosition> gridPositions = Arrays.asList(GridPosition.values());
 
     for (int i = 0; i < gridPositions.size(); i++) {
 
       GridPosition gridPosition = gridPositions.get(i);
       List<GridPosition> fullList = new ArrayList<>(gridPositions);
-      List<GridPosition> legalGridPositions = santoriniBoard.getLegalGridPositions(gridPosition);
+      List<GridPosition> legalGridPositions = santoriniGameBoard.getLegalGridPositions(gridPosition);
 
       List<GridPosition> collect = fullList.stream()
           .filter(a -> legalGridPositions.contains(a))

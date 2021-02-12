@@ -1,13 +1,7 @@
 package com.terence.santorini.game;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.terence.santorini.gamelogic.GameBoardException;
-import com.terence.santorini.gamelogic.GameSerializer;
-import com.terence.santorini.gamelogic.GridPosition;
-import com.terence.santorini.gamelogic.JsonGameRepresentation;
-import com.terence.santorini.gamelogic.JsonGameBoardMapper;
-import com.terence.santorini.gamelogic.SantoriniBoard;
-import com.terence.santorini.gamelogic.SantoriniWorker;
+import com.terence.santorini.gamelogic.SantoriniBoardSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,13 +10,11 @@ import java.util.Optional;
 public class GameService {
 
   private final GameRepository gameRepository;
-  private final GameSerializer gameSerializer;
-  private final JsonGameBoardMapper mapper;
+  private final SantoriniBoardSerializer santoriniBoardSerializer;
 
-  public GameService(GameRepository gameRepository, GameSerializer gameSerializer, JsonGameBoardMapper mapper) {
+  public GameService(GameRepository gameRepository, SantoriniBoardSerializer santoriniBoardSerializer) {
     this.gameRepository = gameRepository;
-    this.gameSerializer = gameSerializer;
-    this.mapper = mapper;
+    this.santoriniBoardSerializer = santoriniBoardSerializer;
   }
 
   public void makePlayerMove(GameCommand gameCommand) throws JsonProcessingException {
@@ -35,25 +27,25 @@ public class GameService {
       throw new RuntimeException();
     }
 
-    Game game = optionalGame.get();
-
-    JsonGameRepresentation jsonGameRepresentation = gameSerializer.jsonToBean(game.getGameBoard());
-
-    SantoriniBoard santoriniBoard = mapper.jsonRepresentationToGameboard(jsonGameRepresentation);
-
-    try {
-      santoriniBoard.moveWorker(GridPosition.A1, new SantoriniWorker("A1"));
-    } catch (GameBoardException e) {
-      e.printStackTrace();
-    }
-
-    JsonGameRepresentation updatedJsonRep = mapper.gameboardToJsonRepresentation(santoriniBoard);
-
-    String updatedGameboardString = gameSerializer.beanToJson(updatedJsonRep);
-
-    game.setGameBoard(updatedGameboardString);
-
-    gameRepository.save(game);
+//    Game game = optionalGame.get();
+//
+//    JsonGameRepresentation jsonGameRepresentation = santoriniBoardSerializer.jsonToBean(game.getGameBoard());
+//
+//    SantoriniBoard santoriniBoard = mapper.jsonRepresentationToGameboard(jsonGameRepresentation);
+//
+//    try {
+//      santoriniBoard.moveWorker(GridPosition.A1, new SantoriniWorker("A1"));
+//    } catch (GameBoardException e) {
+//      e.printStackTrace();
+//    }
+//
+//    JsonGameRepresentation updatedJsonRep = mapper.gameboardToJsonRepresentation(santoriniBoard);
+//
+//    String updatedGameboardString = santoriniBoardSerializer.beanToJson(updatedJsonRep);
+//
+//    game.setGameBoard(updatedGameboardString);
+//
+//    gameRepository.save(game);
 
     // Place worker
     // Move worker

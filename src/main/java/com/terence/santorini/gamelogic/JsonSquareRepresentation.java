@@ -13,4 +13,7 @@ public class JsonSquareRepresentation {
     this.levels = levels;
     this.workerId = workerId;
   }
+
+  public JsonSquareRepresentation() {
+  }
 }

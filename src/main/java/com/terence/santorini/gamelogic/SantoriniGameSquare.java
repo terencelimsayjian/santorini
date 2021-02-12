@@ -2,25 +2,25 @@ package com.terence.santorini.gamelogic;
 
 import java.util.Optional;
 
-public class SantoriniSquare {
+public class SantoriniGameSquare {
   private SantoriniWorker santoriniWorker;
   private Integer levels = 0;
 
-  private SantoriniSquare() {
+  private SantoriniGameSquare() {
   }
 
-  private SantoriniSquare(SantoriniWorker santoriniWorker, Integer levels) {
+  private SantoriniGameSquare(SantoriniWorker santoriniWorker, Integer levels) {
     this.santoriniWorker = santoriniWorker;
     this.levels = levels;
   }
 
-  public static SantoriniSquare initiateEmptySquare() {
-    return new SantoriniSquare();
+  public static SantoriniGameSquare initiateEmptySquare() {
+    return new SantoriniGameSquare();
   }
 
-  static SantoriniSquare fromExistingSquare(String workerId, Integer levels) {
+  static SantoriniGameSquare fromExistingSquare(String workerId, Integer levels) {
     SantoriniWorker worker = workerId != null ? new SantoriniWorker(workerId): null;
-    return new SantoriniSquare(worker, levels);
+    return new SantoriniGameSquare(worker, levels);
   }
 
   public void placeWorker(SantoriniWorker worker) throws GameBoardException {
