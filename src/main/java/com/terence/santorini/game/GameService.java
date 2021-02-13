@@ -33,20 +33,20 @@ public class GameService {
 
     Game game = optionalGame.get();
 
-    SantoriniGameBoard santoriniGameBoard = santoriniBoardSerializer.fromJsonString(game.getGameBoard());
-
-    try {
-      santoriniGameBoard.moveWorker(GridPosition.A1, new SantoriniWorker("A1"));
-    } catch (GameBoardException e) {
-      e.printStackTrace();
-    }
-
-
-    String updatedGameboardString = santoriniBoardSerializer.toJsonString(santoriniGameBoard);
-
-    game.setGameBoard(updatedGameboardString);
-
-    gameRepository.save(game);
+//    SantoriniGameBoard santoriniGameBoard = santoriniBoardSerializer.fromJsonString(game.getGameBoard());
+//
+//    try {
+//      santoriniGameBoard.moveWorker(GridPosition.A1, new SantoriniWorker("A1"));
+//    } catch (GameBoardException e) {
+//      e.printStackTrace();
+//    }
+//
+//
+//    String updatedGameboardString = santoriniBoardSerializer.toJsonString(santoriniGameBoard);
+//
+//    game.setGameBoard(updatedGameboardString);
+//
+//    gameRepository.save(game);
 
     // Place worker
     // Move worker
