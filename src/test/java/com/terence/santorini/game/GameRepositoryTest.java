@@ -13,10 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
+//@Testcontainers
 class GameRepositoryTest {
 
   @Autowired
   private GameRepository gameRepository;
+
+//  @Container
+//  public GenericContainer postgres = new GenericContainer(DockerImageName.parse("postgres:13.2-alpine"))
+//      .withExposedPorts(6379);
 
   @Test
   void testSimpleSaveAndFind() {
