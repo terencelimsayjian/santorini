@@ -1,7 +1,5 @@
 package com.terence.santorini.game;
 
-import com.terence.santorini.gamelogic.JsonGameRepresentation;
-import com.terence.santorini.gamelogic.JsonSquareRepresentation;
 import com.terence.santorini.testutil.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +22,18 @@ class GameEntityRepositoryTest extends BaseIntegrationTest {
 
   @Test
   void testSimpleSaveAndFind() {
-    List<List<JsonSquareRepresentation>> jsonSquares = new ArrayList<>(5);
+    List<List<JsonGameSquare>> jsonSquares = new ArrayList<>(5);
     jsonSquares.add(0, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
     jsonSquares.add(1, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
     jsonSquares.add(2, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
     jsonSquares.add(3, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
     jsonSquares.add(4, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
 
-    JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
-    jsonGameRepresentation.setGameboard(jsonSquares);
+    JsonGameBoard jsonGameBoard = new JsonGameBoard();
+    jsonGameBoard.setGameboard(jsonSquares);
 
     GameEntity gameEntity = new GameEntity();
-    gameEntity.setGameBoard(jsonGameRepresentation);
+    gameEntity.setGameBoard(jsonGameBoard);
     gameEntity.setPlayer1("Player1");
     gameEntity.setPlayer2("Player2");
     gameEntity.setWinner("Winner");
@@ -57,7 +55,7 @@ class GameEntityRepositoryTest extends BaseIntegrationTest {
     assertEquals(createdAt, actual.getCreatedAt());
     assertEquals(updatedAt, actual.getUpdatedAt());
 
-    JsonGameRepresentation actualGameBoard = actual.getGameBoard();
+    JsonGameBoard actualGameBoard = actual.getGameBoard();
 
     actualGameBoard.getGameboard().forEach(gb -> {
       gb.forEach(gs -> {
@@ -67,7 +65,7 @@ class GameEntityRepositoryTest extends BaseIntegrationTest {
     });
   }
 
-  private JsonSquareRepresentation emptySquare() {
-    return new JsonSquareRepresentation(0, null);
+  private JsonGameSquare emptySquare() {
+    return new JsonGameSquare(0, null);
   }
 }

@@ -1,5 +1,7 @@
 package com.terence.santorini.gamelogic;
 
+import com.terence.santorini.game.JsonGameBoard;
+import com.terence.santorini.game.JsonGameSquare;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,13 +14,13 @@ public class SantoriniGameboardMapper {
   public SantoriniGameboardMapper() {
   }
 
-  JsonGameRepresentation gameboardToJsonRepresentation(SantoriniGameBoard santoriniGameBoard) {
+  JsonGameBoard gameboardToJsonRepresentation(SantoriniGameBoard santoriniGameBoard) {
     List<List<SantoriniGameSquare>> gameBoard = santoriniGameBoard.gameBoard;
 
-    List<List<JsonSquareRepresentation>> jsonBoard = new ArrayList<>(5);
+    List<List<JsonGameSquare>> jsonBoard = new ArrayList<>(5);
 
     gameBoard.forEach(row -> {
-      List<JsonSquareRepresentation> jsonRow = row.stream()
+      List<JsonGameSquare> jsonRow = row.stream()
           .map(this::toJsonSquareRepresentation)
           .collect(Collectors.toList());
 
@@ -26,35 +28,35 @@ public class SantoriniGameboardMapper {
 
     });
 
-    JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
-    jsonGameRepresentation.setGameboard(jsonBoard);
+    JsonGameBoard jsonGameBoard = new JsonGameBoard();
+    jsonGameBoard.setGameboard(jsonBoard);
 
-    return jsonGameRepresentation;
+    return jsonGameBoard;
   }
 
-  private JsonSquareRepresentation toJsonSquareRepresentation(SantoriniGameSquare santoriniGameSquare) {
+  private JsonGameSquare toJsonSquareRepresentation(SantoriniGameSquare santoriniGameSquare) {
     String workerId = santoriniGameSquare.getWorker().map(SantoriniWorker::getId).orElse(null);
 
-    return new JsonSquareRepresentation(santoriniGameSquare.getLevels(), workerId);
+    return new JsonGameSquare(santoriniGameSquare.getLevels(), workerId);
   }
 
-  SantoriniGameBoard jsonRepresentationToGameboard(JsonGameRepresentation jsonGameRepresentation) {
+  SantoriniGameBoard jsonRepresentationToGameboard(JsonGameBoard jsonGameBoard) {
     List<List<SantoriniGameSquare>> gameboard = new ArrayList<>(5);
     HashMap<String, GridPosition> playerIdGridPositionLookup = new HashMap<>();
 
     SantoriniGameBoard santoriniGameBoard = SantoriniGameBoard.initiateBoard();
-    List<List<JsonSquareRepresentation>> jsonGameboardRepresentation = jsonGameRepresentation.getGameboard();
+    List<List<JsonGameSquare>> jsonGameboardRepresentation = jsonGameBoard.getGameboard();
 
     for (int i = 0; i < jsonGameboardRepresentation.size(); i++) {
-      List<JsonSquareRepresentation> jsonRowRepresentation = jsonGameboardRepresentation.get(i);
+      List<JsonGameSquare> jsonRowRepresentation = jsonGameboardRepresentation.get(i);
       List<SantoriniGameSquare> santoriniGameSquares = new ArrayList<>(5);
 
       for (int j = 0; j < jsonRowRepresentation.size(); j++) {
-        JsonSquareRepresentation jsonSquareRepresentation = jsonRowRepresentation.get(j);
-        santoriniGameSquares.add(toSantoriniSquare(jsonSquareRepresentation));
+        JsonGameSquare jsonGameSquare = jsonRowRepresentation.get(j);
+        santoriniGameSquares.add(toSantoriniSquare(jsonGameSquare));
 
-        if (jsonSquareRepresentation.getWorkerId() != null) {
-          playerIdGridPositionLookup.put(jsonSquareRepresentation.getWorkerId(), GridPosition.from(i, j).orElseThrow());
+        if (jsonGameSquare.getWorkerId() != null) {
+          playerIdGridPositionLookup.put(jsonGameSquare.getWorkerId(), GridPosition.from(i, j).orElseThrow());
         }
       }
 
@@ -67,7 +69,7 @@ public class SantoriniGameboardMapper {
     return santoriniGameBoard;
   }
 
-  private SantoriniGameSquare toSantoriniSquare(JsonSquareRepresentation jsonSquare) {
+  private SantoriniGameSquare toSantoriniSquare(JsonGameSquare jsonSquare) {
     return SantoriniGameSquare.fromExistingSquare(jsonSquare.getWorkerId(), jsonSquare.getLevels());
   }
 

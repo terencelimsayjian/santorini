@@ -1,6 +1,5 @@
 package com.terence.santorini.game;
 
-import com.terence.santorini.gamelogic.JsonGameRepresentation;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -28,7 +27,7 @@ public class GameEntity extends BaseEntity {
   @Type(type = "jsonb")
   @Column(name = "game_board", columnDefinition = "jsonb")
 //  @Convert(converter = GameBoardConverter.class)
-  private JsonGameRepresentation gameBoard;
+  private JsonGameBoard gameBoard;
 
   @Column(name = "player_1")
   private String player1;

@@ -1,5 +1,7 @@
 package com.terence.santorini.gamelogic;
 
+import com.terence.santorini.game.JsonGameBoard;
+import com.terence.santorini.game.JsonGameSquare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,14 +25,14 @@ class SantoriniGameBoardSerializerTest {
   }
 
   @Nested
-  class JsonGameRepresentationToGameboard {
+  class JsonGameBoardToGameboard {
     @Test
     void mapEmptyGameboard() throws GameBoardException {
       SantoriniGameBoard gameBoard = SantoriniGameBoard.initiateBoard();
 
-      JsonGameRepresentation jsonGameRepresentation = santoriniGameboardMapper.gameboardToJsonRepresentation(gameBoard);
+      JsonGameBoard jsonGameBoard = santoriniGameboardMapper.gameboardToJsonRepresentation(gameBoard);
 
-      List<List<JsonSquareRepresentation>> gameboard = jsonGameRepresentation.getGameboard();
+      List<List<JsonGameSquare>> gameboard = jsonGameBoard.getGameboard();
 
       gameboard.forEach(row -> {
         row.forEach(square -> {
@@ -57,19 +59,19 @@ class SantoriniGameBoardSerializerTest {
       gameBoard.placeBlock(GridPosition.D3, b1Worker);
       gameBoard.moveWorker(GridPosition.B4, b1Worker);
 
-      JsonGameRepresentation jsonGameRepresentation = santoriniGameboardMapper.gameboardToJsonRepresentation(gameBoard);
+      JsonGameBoard jsonGameBoard = santoriniGameboardMapper.gameboardToJsonRepresentation(gameBoard);
 
-      List<List<JsonSquareRepresentation>> gameboard = jsonGameRepresentation.getGameboard();
+      List<List<JsonGameSquare>> gameboard = jsonGameBoard.getGameboard();
 
-      JsonSquareRepresentation a2Square = gameboard.get(GridPosition.A2.getRowIndex()).get(GridPosition.A2.getColumnIndex());
+      JsonGameSquare a2Square = gameboard.get(GridPosition.A2.getRowIndex()).get(GridPosition.A2.getColumnIndex());
       assertEquals(1, a2Square.getLevels());
       assertEquals("A1", a2Square.getWorkerId());
 
-      JsonSquareRepresentation d3Square = gameboard.get(GridPosition.D3.getRowIndex()).get(GridPosition.D3.getColumnIndex());
+      JsonGameSquare d3Square = gameboard.get(GridPosition.D3.getRowIndex()).get(GridPosition.D3.getColumnIndex());
       assertEquals(2, d3Square.getLevels());
       assertNull(d3Square.getWorkerId());
 
-      JsonSquareRepresentation b4Square = gameboard.get(GridPosition.B4.getRowIndex()).get(GridPosition.B4.getColumnIndex());
+      JsonGameSquare b4Square = gameboard.get(GridPosition.B4.getRowIndex()).get(GridPosition.B4.getColumnIndex());
       assertEquals(0, b4Square.getLevels());
       assertEquals("B1", b4Square.getWorkerId());
     }
@@ -79,17 +81,17 @@ class SantoriniGameBoardSerializerTest {
   class GameboardToJsonRepresentation {
     @Test
     void mapEmptyJsonGameboard() {
-      List<List<JsonSquareRepresentation>> jsonSquares = new ArrayList<>(5);
+      List<List<JsonGameSquare>> jsonSquares = new ArrayList<>(5);
       jsonSquares.add(0, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
       jsonSquares.add(1, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
       jsonSquares.add(2, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
       jsonSquares.add(3, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
       jsonSquares.add(4, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
 
-      JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
-      jsonGameRepresentation.setGameboard(jsonSquares);
+      JsonGameBoard jsonGameBoard = new JsonGameBoard();
+      jsonGameBoard.setGameboard(jsonSquares);
 
-      SantoriniGameBoard santoriniGameBoard = santoriniGameboardMapper.jsonRepresentationToGameboard(jsonGameRepresentation);
+      SantoriniGameBoard santoriniGameBoard = santoriniGameboardMapper.jsonRepresentationToGameboard(jsonGameBoard);
 
       santoriniGameBoard.gameBoard.forEach(row -> {
         row.forEach(square -> {
@@ -104,17 +106,17 @@ class SantoriniGameBoardSerializerTest {
 
     @Test
     void mapPopulatedJsonGameboard() {
-      List<List<JsonSquareRepresentation>> jsonSquares = new ArrayList<>(5);
-      jsonSquares.add(0, Arrays.asList(new JsonSquareRepresentation(1, "A1"), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-      jsonSquares.add(1, Arrays.asList(emptySquare(), new JsonSquareRepresentation(2, null), emptySquare(), emptySquare(), emptySquare()));
-      jsonSquares.add(2, Arrays.asList(emptySquare(), emptySquare(), new JsonSquareRepresentation(4, null), emptySquare(), emptySquare()));
-      jsonSquares.add(3, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), new JsonSquareRepresentation(3, "B1"), emptySquare()));
-      jsonSquares.add(4, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), new JsonSquareRepresentation(0, "B2")));
+      List<List<JsonGameSquare>> jsonSquares = new ArrayList<>(5);
+      jsonSquares.add(0, Arrays.asList(new JsonGameSquare(1, "A1"), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+      jsonSquares.add(1, Arrays.asList(emptySquare(), new JsonGameSquare(2, null), emptySquare(), emptySquare(), emptySquare()));
+      jsonSquares.add(2, Arrays.asList(emptySquare(), emptySquare(), new JsonGameSquare(4, null), emptySquare(), emptySquare()));
+      jsonSquares.add(3, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), new JsonGameSquare(3, "B1"), emptySquare()));
+      jsonSquares.add(4, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), new JsonGameSquare(0, "B2")));
 
-      JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
-      jsonGameRepresentation.setGameboard(jsonSquares);
+      JsonGameBoard jsonGameBoard = new JsonGameBoard();
+      jsonGameBoard.setGameboard(jsonSquares);
 
-      SantoriniGameBoard santoriniGameBoard = santoriniGameboardMapper.jsonRepresentationToGameboard(jsonGameRepresentation);
+      SantoriniGameBoard santoriniGameBoard = santoriniGameboardMapper.jsonRepresentationToGameboard(jsonGameBoard);
 
       List<List<SantoriniGameSquare>> gameBoard = santoriniGameBoard.gameBoard;
 
@@ -147,8 +149,8 @@ class SantoriniGameBoardSerializerTest {
       assertEquals(GridPosition.E5, playerIdGridPositionLookup.get("B2"));
     }
 
-    private JsonSquareRepresentation emptySquare() {
-      return new JsonSquareRepresentation(0, null);
+    private JsonGameSquare emptySquare() {
+      return new JsonGameSquare(0, null);
     }
   }
 }
