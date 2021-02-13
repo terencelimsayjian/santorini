@@ -1,7 +1,10 @@
 package com.terence.santorini.game;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.terence.santorini.gamelogic.GameBoardException;
+import com.terence.santorini.gamelogic.GridPosition;
+import com.terence.santorini.gamelogic.SantoriniGameBoard;
 import com.terence.santorini.gamelogic.SantoriniGameboardMapper;
+import com.terence.santorini.gamelogic.SantoriniWorker;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,36 +20,57 @@ public class GameService {
     this.santoriniGameboardMapper = santoriniGameboardMapper;
   }
 
-  public void makePlayerMove(GameCommand gameCommand) throws JsonProcessingException {
+  public JsonGameBoard makePlayerMove(GameCommand gameCommand) {
     // Game should be created? I think game should be created when ppl join the room, not over here
     // This should be player actions
 
-    Optional<GameEntity> optionalGame = gameRepository.findById("ID");
+    Optional<GameEntity> optionalGame = gameRepository.findById(gameCommand.getId());
 
+    // Temporary game creation code
     if (optionalGame.isEmpty()) {
-      throw new RuntimeException();
+      SantoriniGameBoard santoriniGameBoard = SantoriniGameBoard.initiateBoard();
+      JsonGameBoard jsonGameBoard = santoriniGameboardMapper.gameboardToJsonRepresentation(santoriniGameBoard);
+      GameEntity newGameEntity = new GameEntity();
+      newGameEntity.setGameBoard(jsonGameBoard);
+      GameEntity save = gameRepository.save(newGameEntity);
+      optionalGame = Optional.of(save);
     }
 
     GameEntity gameEntity = optionalGame.get();
 
-//    SantoriniGameBoard santoriniGameBoard = santoriniBoardSerializer.fromJsonString(game.getGameBoard());
-//
-//    try {
-//      santoriniGameBoard.moveWorker(GridPosition.A1, new SantoriniWorker("A1"));
-//    } catch (GameBoardException e) {
-//      e.printStackTrace();
-//    }
-//
-//
-//    String updatedGameboardString = santoriniBoardSerializer.toJsonString(santoriniGameBoard);
-//
-//    game.setGameBoard(updatedGameboardString);
-//
-//    gameRepository.save(game);
+    SantoriniGameBoard santoriniGameBoard = santoriniGameboardMapper.jsonRepresentationToGameboard(gameEntity.getGameBoard());
 
-    // Place worker
-    // Move worker
-    // Place block
+    try {
+      GridPosition newPosition = GridPosition.valueOf(gameCommand.getNewGridPosition());
+      String workerId = gameCommand.getWorkerId();
+      String command = gameCommand.getCommand();
+
+      switch (command) {
+        case "PLACE_WORKER":
+          santoriniGameBoard.placeWorker(newPosition, new SantoriniWorker(workerId));
+          break;
+        case "MOVE_WORKER":
+          santoriniGameBoard.moveWorker(newPosition, new SantoriniWorker(workerId));
+          break;
+        case "PLACE_BLOCK":
+          santoriniGameBoard.placeBlock(newPosition, new SantoriniWorker(workerId));
+          break;
+        default:
+          break;
+      }
+
+    } catch (GameBoardException e) {
+      e.printStackTrace();
+    }
+
+
+    JsonGameBoard jsonGameBoard = santoriniGameboardMapper.gameboardToJsonRepresentation(santoriniGameBoard);
+
+    gameEntity.setGameBoard(jsonGameBoard);
+
+    gameRepository.save(gameEntity);
+
+    return jsonGameBoard;
 
     // Responses
     // OK // Continue

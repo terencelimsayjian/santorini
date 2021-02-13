@@ -9,6 +9,12 @@ public class GameCommand {
 
   private String id;
 
-  private String command;
+  private String workerId;
+
+  private String command; // PLACE_WORKER, MOVE_WORKER, PLACE_BLOCK, NO_ACTION
+
+  private String originalGridPosition;
+
+  private String newGridPosition;
 
 }

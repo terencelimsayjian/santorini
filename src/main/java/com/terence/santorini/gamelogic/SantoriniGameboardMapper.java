@@ -14,7 +14,7 @@ public class SantoriniGameboardMapper {
   public SantoriniGameboardMapper() {
   }
 
-  JsonGameBoard gameboardToJsonRepresentation(SantoriniGameBoard santoriniGameBoard) {
+  public JsonGameBoard gameboardToJsonRepresentation(SantoriniGameBoard santoriniGameBoard) {
     List<List<SantoriniGameSquare>> gameBoard = santoriniGameBoard.gameBoard;
 
     List<List<JsonGameSquare>> jsonBoard = new ArrayList<>(5);
@@ -40,7 +40,7 @@ public class SantoriniGameboardMapper {
     return new JsonGameSquare(santoriniGameSquare.getLevels(), workerId);
   }
 
-  SantoriniGameBoard jsonRepresentationToGameboard(JsonGameBoard jsonGameBoard) {
+  public SantoriniGameBoard jsonRepresentationToGameboard(JsonGameBoard jsonGameBoard) {
     List<List<SantoriniGameSquare>> gameboard = new ArrayList<>(5);
     HashMap<String, GridPosition> playerIdGridPositionLookup = new HashMap<>();
 
