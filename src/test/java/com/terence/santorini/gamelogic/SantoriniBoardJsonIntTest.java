@@ -3,6 +3,7 @@ package com.terence.santorini.gamelogic;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
 class SantoriniGameBoardSerializerIntegrationTest {
+  private SantoriniBoardSerializer santoriniBoardSerializer;
 
-  @Autowired
-  SantoriniBoardSerializer santoriniBoardSerializer;
+  private ObjectMapper objectMapper;
 
-  @Autowired
-  ObjectMapper objectMapper;
+  @BeforeEach
+  void setUp() {
+    objectMapper = new ObjectMapper();
+    santoriniBoardSerializer = new SantoriniBoardSerializer(objectMapper);
+  }
 
   @Nested
   class SerializeJsonRepresentationToString {

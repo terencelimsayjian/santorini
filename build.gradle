@@ -18,10 +18,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.projectlombok:lombok:1.18.16'
     implementation 'org.liquibase:liquibase-core'
+    implementation 'com.vladmihalcea:hibernate-types-52:2.10.2'
     runtime 'org.postgresql:postgresql:42.2.18'
 
-//    testCompile 'org.testcontainers:postgresql:1.15.2'
-//    testCompile 'org.testcontainers:junit-jupiter:1.15.2'
+    testCompile 'org.testcontainers:postgresql:1.15.2'
+    testCompile 'org.testcontainers:junit-jupiter:1.15.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.16'

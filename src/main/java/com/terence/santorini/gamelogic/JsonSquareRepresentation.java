@@ -3,9 +3,11 @@ package com.terence.santorini.gamelogic;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class JsonSquareRepresentation {
+public class JsonSquareRepresentation implements Serializable {
   private Integer levels = 0;
   private String workerId = null;
 

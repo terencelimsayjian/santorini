@@ -1,43 +1,45 @@
 package com.terence.santorini.game;
 
+import com.terence.santorini.gamelogic.JsonGameRepresentation;
 import com.terence.santorini.gamelogic.JsonSquareRepresentation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DataJpaTest
-//@Testcontainers
-class GameRepositoryTest {
+class GameRepositoryTest extends AbstractIntegrationTest{
 
   @Autowired
   private GameRepository gameRepository;
 
-//  @Container
-//  public GenericContainer postgres = new GenericContainer(DockerImageName.parse("postgres:13.2-alpine"))
-//      .withExposedPorts(6379);
+  @Test
+  void test() {
+  }
 
   @Test
   void testSimpleSaveAndFind() {
+      assertTrue(postgreDBContainer.isRunning());
 
-//    List<List<JsonSquareRepresentation>> jsonSquares = new ArrayList<>(5);
-//    jsonSquares.add(0, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-//    jsonSquares.add(1, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-//    jsonSquares.add(2, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-//    jsonSquares.add(3, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-//    jsonSquares.add(4, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-//
-//    JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
-//    jsonGameRepresentation.setGameboard(jsonSquares);
+    List<List<JsonSquareRepresentation>> jsonSquares = new ArrayList<>(5);
+    jsonSquares.add(0, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(1, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(2, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(3, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(4, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+
+    JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
+    jsonGameRepresentation.setGameboard(jsonSquares);
 
     Game game = new Game();
-//    game.setGameBoard(jsonGameRepresentation);
+    game.setGameBoard(jsonGameRepresentation);
     game.setPlayer1("Player1");
     game.setPlayer2("Player2");
     game.setWinner("Winner");
