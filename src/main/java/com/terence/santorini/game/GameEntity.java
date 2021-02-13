@@ -1,7 +1,6 @@
 package com.terence.santorini.game;
 
 import com.terence.santorini.gamelogic.JsonGameRepresentation;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,12 +11,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.Instant;
 
 @Entity
 @Getter
 @Setter
-public class Game extends BaseEntity {
+@Table(name = "game")
+public class GameEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(generator = "prefix-uuid-generator")

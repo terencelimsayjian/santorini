@@ -21,13 +21,13 @@ public class GameService {
     // Game should be created? I think game should be created when ppl join the room, not over here
     // This should be player actions
 
-    Optional<Game> optionalGame = gameRepository.findById("ID");
+    Optional<GameEntity> optionalGame = gameRepository.findById("ID");
 
     if (optionalGame.isEmpty()) {
       throw new RuntimeException();
     }
 
-    Game game = optionalGame.get();
+    GameEntity gameEntity = optionalGame.get();
 
 //    SantoriniGameBoard santoriniGameBoard = santoriniBoardSerializer.fromJsonString(game.getGameBoard());
 //

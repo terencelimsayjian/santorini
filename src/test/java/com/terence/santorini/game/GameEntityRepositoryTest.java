@@ -17,7 +17,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class GameRepositoryTest extends BaseIntegrationTest {
+class GameEntityRepositoryTest extends BaseIntegrationTest {
 
   @Autowired
   private GameRepository gameRepository;
@@ -34,22 +34,22 @@ class GameRepositoryTest extends BaseIntegrationTest {
     JsonGameRepresentation jsonGameRepresentation = new JsonGameRepresentation();
     jsonGameRepresentation.setGameboard(jsonSquares);
 
-    Game game = new Game();
-    game.setGameBoard(jsonGameRepresentation);
-    game.setPlayer1("Player1");
-    game.setPlayer2("Player2");
-    game.setWinner("Winner");
+    GameEntity gameEntity = new GameEntity();
+    gameEntity.setGameBoard(jsonGameRepresentation);
+    gameEntity.setPlayer1("Player1");
+    gameEntity.setPlayer2("Player2");
+    gameEntity.setWinner("Winner");
     Instant createdAt = Instant.now();
-    game.setCreatedAt(createdAt);
+    gameEntity.setCreatedAt(createdAt);
     Instant updatedAt = Instant.now().plus(1000, ChronoUnit.SECONDS);
-    game.setUpdatedAt(updatedAt);
+    gameEntity.setUpdatedAt(updatedAt);
 
-    Game savedGame = gameRepository.save(game);
+    GameEntity savedGameEntity = gameRepository.save(gameEntity);
 
-    Optional<Game> optionalGame = gameRepository.findById(savedGame.getId());
+    Optional<GameEntity> optionalGame = gameRepository.findById(savedGameEntity.getId());
 
     assertTrue(optionalGame.isPresent());
-    Game actual = optionalGame.get();
+    GameEntity actual = optionalGame.get();
 
     assertEquals("Player1", actual.getPlayer1());
     assertEquals("Player2", actual.getPlayer2());
