@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,8 +24,6 @@ class GameRepositoryTest extends BaseIntegrationTest {
 
   @Test
   void testSimpleSaveAndFind() {
-      assertTrue(postgreDBContainer.isRunning());
-
     List<List<JsonSquareRepresentation>> jsonSquares = new ArrayList<>(5);
     jsonSquares.add(0, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
     jsonSquares.add(1, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
@@ -58,14 +57,14 @@ class GameRepositoryTest extends BaseIntegrationTest {
     assertEquals(createdAt, actual.getCreatedAt());
     assertEquals(updatedAt, actual.getUpdatedAt());
 
-//    JsonGameRepresentation actualGameBoard = actual.getGameBoard();
+    JsonGameRepresentation actualGameBoard = actual.getGameBoard();
 
-//    actualGameBoard.getGameboard().forEach(gb -> {
-//      gb.forEach(gs -> {
-//        assertEquals(0, gs.getLevels());
-//        assertNull(gs.getWorkerId());
-//      });
-//    });
+    actualGameBoard.getGameboard().forEach(gb -> {
+      gb.forEach(gs -> {
+        assertEquals(0, gs.getLevels());
+        assertNull(gs.getWorkerId());
+      });
+    });
   }
 
   private JsonSquareRepresentation emptySquare() {
