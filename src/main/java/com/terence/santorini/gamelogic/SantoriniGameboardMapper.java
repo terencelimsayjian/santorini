@@ -1,7 +1,5 @@
 package com.terence.santorini.gamelogic;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,29 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class SantoriniBoardSerializer {
-  private ObjectMapper objectMapper;
-
-  public SantoriniBoardSerializer(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
-  }
-
-  public SantoriniGameBoard fromJsonString(String jsonString) throws JsonProcessingException {
-    JsonGameRepresentation jsonGameRepresentation = jsonToPojo(jsonString);
-    return jsonRepresentationToGameboard(jsonGameRepresentation);
-  }
-
-  public String toJsonString(SantoriniGameBoard santoriniGameBoard) throws JsonProcessingException {
-    JsonGameRepresentation jsonGameRepresentation = gameboardToJsonRepresentation(santoriniGameBoard);
-    return pojoToJson(jsonGameRepresentation);
-  }
-
-  String pojoToJson(JsonGameRepresentation jsonGameRepresentation) throws JsonProcessingException {
-    return objectMapper.writeValueAsString(jsonGameRepresentation);
-  }
-
-  JsonGameRepresentation jsonToPojo(String jsonString) throws JsonProcessingException {
-    return objectMapper.readValue(jsonString, JsonGameRepresentation.class);
+public class SantoriniGameboardMapper {
+  public SantoriniGameboardMapper() {
   }
 
   JsonGameRepresentation gameboardToJsonRepresentation(SantoriniGameBoard santoriniGameBoard) {

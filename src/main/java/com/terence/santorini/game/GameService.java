@@ -1,11 +1,7 @@
 package com.terence.santorini.game;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.terence.santorini.gamelogic.GameBoardException;
-import com.terence.santorini.gamelogic.GridPosition;
-import com.terence.santorini.gamelogic.SantoriniBoardSerializer;
-import com.terence.santorini.gamelogic.SantoriniGameBoard;
-import com.terence.santorini.gamelogic.SantoriniWorker;
+import com.terence.santorini.gamelogic.SantoriniGameboardMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,11 +10,11 @@ import java.util.Optional;
 public class GameService {
 
   private final GameRepository gameRepository;
-  private final SantoriniBoardSerializer santoriniBoardSerializer;
+  private final SantoriniGameboardMapper santoriniGameboardMapper;
 
-  public GameService(GameRepository gameRepository, SantoriniBoardSerializer santoriniBoardSerializer) {
+  public GameService(GameRepository gameRepository, SantoriniGameboardMapper santoriniGameboardMapper) {
     this.gameRepository = gameRepository;
-    this.santoriniBoardSerializer = santoriniBoardSerializer;
+    this.santoriniGameboardMapper = santoriniGameboardMapper;
   }
 
   public void makePlayerMove(GameCommand gameCommand) throws JsonProcessingException {
