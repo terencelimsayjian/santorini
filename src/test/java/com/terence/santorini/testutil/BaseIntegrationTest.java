@@ -1,4 +1,4 @@
-package com.terence.santorini.game;
+package com.terence.santorini.testutil;
 
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,9 +13,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(initializers = AbstractIntegrationTest.DockerPostgreDataSourceInitializer.class)
+@ContextConfiguration(initializers = BaseIntegrationTest.DockerPostgreDataSourceInitializer.class)
 @Testcontainers
-public abstract class AbstractIntegrationTest {
+public abstract class BaseIntegrationTest {
 
   public static PostgreSQLContainer<?> postgreDBContainer = new PostgreSQLContainer<>("postgres:13.2-alpine").withUsername("postgres");
 

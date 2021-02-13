@@ -1,10 +1,9 @@
 package com.terence.santorini;
 
-import com.terence.santorini.game.AbstractIntegrationTest;
+import com.terence.santorini.testutil.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-class SantoriniApplicationTests extends AbstractIntegrationTest {
+class SantoriniApplicationTests extends BaseIntegrationTest {
 
   @Test
   void contextLoads() {

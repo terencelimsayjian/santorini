@@ -2,6 +2,7 @@ package com.terence.santorini.game;
 
 import com.terence.santorini.gamelogic.JsonGameRepresentation;
 import com.terence.santorini.gamelogic.JsonSquareRepresentation;
+import com.terence.santorini.testutil.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,14 +16,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class GameRepositoryTest extends AbstractIntegrationTest{
+class GameRepositoryTest extends BaseIntegrationTest {
 
   @Autowired
   private GameRepository gameRepository;
-
-  @Test
-  void test() {
-  }
 
   @Test
   void testSimpleSaveAndFind() {
