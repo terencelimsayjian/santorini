@@ -19,7 +19,7 @@ public class SantoriniGameSquare {
   }
 
   static SantoriniGameSquare fromExistingSquare(String workerId, Integer levels) {
-    SantoriniWorker worker = workerId != null ? new SantoriniWorker(workerId): null;
+    SantoriniWorker worker = workerId != null ? new SantoriniWorker(workerId) : null;
     return new SantoriniGameSquare(worker, levels);
   }
 

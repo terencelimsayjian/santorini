@@ -11,7 +11,7 @@ public class GameCommand {
 
   private String workerId;
 
-  private String command; // PLACE_WORKER, MOVE_WORKER, PLACE_BLOCK, NO_ACTION
+  private String command;
 
   private String originalGridPosition;
 
