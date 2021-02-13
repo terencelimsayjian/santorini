@@ -1,4 +1,4 @@
-create table gameEntity (
+create table game (
     id varchar(255) PRIMARY KEY ,
     game_board jsonb,
     player_1 varchar(255),
