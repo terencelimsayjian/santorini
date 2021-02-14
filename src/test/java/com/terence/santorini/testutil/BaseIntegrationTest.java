@@ -17,21 +17,22 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class BaseIntegrationTest {
 
-  public static PostgreSQLContainer<?> postgreDBContainer = new PostgreSQLContainer<>("postgres:13.2-alpine").withUsername("postgres");
+  public static PostgreSQLContainer<?> postgreDBContainer =
+      new PostgreSQLContainer<>("postgres:13.2-alpine").withUsername("postgres");
 
   static {
     postgreDBContainer.start();
   }
 
-  public static class DockerPostgreDataSourceInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+  public static class DockerPostgreDataSourceInitializer
+      implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
       TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
           applicationContext,
           "spring.datasource.url=" + postgreDBContainer.getJdbcUrl(),
           "spring.datasource.username=" + postgreDBContainer.getUsername(),
-          "spring.datasource.password=" + postgreDBContainer.getPassword()
-      );
+          "spring.datasource.password=" + postgreDBContainer.getPassword());
     }
   }
 }

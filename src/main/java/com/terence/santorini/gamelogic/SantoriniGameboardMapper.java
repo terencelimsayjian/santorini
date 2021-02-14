@@ -2,31 +2,28 @@ package com.terence.santorini.gamelogic;
 
 import com.terence.santorini.game.JsonGameBoard;
 import com.terence.santorini.game.JsonGameSquare;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SantoriniGameboardMapper {
-  public SantoriniGameboardMapper() {
-  }
+  public SantoriniGameboardMapper() {}
 
   public JsonGameBoard gameboardToJsonRepresentation(SantoriniGameBoard santoriniGameBoard) {
     List<List<SantoriniGameSquare>> gameBoard = santoriniGameBoard.gameBoard;
 
     List<List<JsonGameSquare>> jsonBoard = new ArrayList<>(5);
 
-    gameBoard.forEach(row -> {
-      List<JsonGameSquare> jsonRow = row.stream()
-          .map(this::toJsonSquareRepresentation)
-          .collect(Collectors.toList());
+    gameBoard.forEach(
+        row -> {
+          List<JsonGameSquare> jsonRow =
+              row.stream().map(this::toJsonSquareRepresentation).collect(Collectors.toList());
 
-      jsonBoard.add(jsonRow);
-
-    });
+          jsonBoard.add(jsonRow);
+        });
 
     JsonGameBoard jsonGameBoard = new JsonGameBoard();
     jsonGameBoard.setGameboard(jsonBoard);
@@ -56,7 +53,8 @@ public class SantoriniGameboardMapper {
         santoriniGameSquares.add(toSantoriniSquare(jsonGameSquare));
 
         if (jsonGameSquare.getWorkerId() != null) {
-          playerIdGridPositionLookup.put(jsonGameSquare.getWorkerId(), GridPosition.from(i, j).orElseThrow());
+          playerIdGridPositionLookup.put(
+              jsonGameSquare.getWorkerId(), GridPosition.from(i, j).orElseThrow());
         }
       }
 
@@ -72,5 +70,4 @@ public class SantoriniGameboardMapper {
   private SantoriniGameSquare toSantoriniSquare(JsonGameSquare jsonSquare) {
     return SantoriniGameSquare.fromExistingSquare(jsonSquare.getWorkerId(), jsonSquare.getLevels());
   }
-
 }

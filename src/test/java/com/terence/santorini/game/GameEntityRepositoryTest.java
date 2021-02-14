@@ -1,33 +1,41 @@
 package com.terence.santorini.game;
 
-import com.terence.santorini.testutil.BaseIntegrationTest;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.terence.santorini.testutil.BaseIntegrationTest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class GameEntityRepositoryTest extends BaseIntegrationTest {
 
-  @Autowired
-  private GameRepository gameRepository;
+  @Autowired private GameRepository gameRepository;
 
   @Test
   void testSimpleSaveAndFind() {
     List<List<JsonGameSquare>> jsonSquares = new ArrayList<>(5);
-    jsonSquares.add(0, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-    jsonSquares.add(1, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-    jsonSquares.add(2, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-    jsonSquares.add(3, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
-    jsonSquares.add(4, Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(
+        0,
+        Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(
+        1,
+        Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(
+        2,
+        Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(
+        3,
+        Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
+    jsonSquares.add(
+        4,
+        Arrays.asList(emptySquare(), emptySquare(), emptySquare(), emptySquare(), emptySquare()));
 
     JsonGameBoard jsonGameBoard = new JsonGameBoard();
     jsonGameBoard.setGameboard(jsonSquares);
@@ -57,12 +65,16 @@ class GameEntityRepositoryTest extends BaseIntegrationTest {
 
     JsonGameBoard actualGameBoard = actual.getGameBoard();
 
-    actualGameBoard.getGameboard().forEach(gb -> {
-      gb.forEach(gs -> {
-        assertEquals(0, gs.getLevels());
-        assertNull(gs.getWorkerId());
-      });
-    });
+    actualGameBoard
+        .getGameboard()
+        .forEach(
+            gb -> {
+              gb.forEach(
+                  gs -> {
+                    assertEquals(0, gs.getLevels());
+                    assertNull(gs.getWorkerId());
+                  });
+            });
   }
 
   private JsonGameSquare emptySquare() {

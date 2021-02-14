@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 public enum GridPosition {
-
   A1(0, 0),
   A2(0, 1),
   A3(0, 2),
@@ -51,8 +50,7 @@ public enum GridPosition {
   public static Optional<GridPosition> from(int row, int column) {
     List<GridPosition> gridPositions = Arrays.asList(GridPosition.values());
 
-    return gridPositions
-        .stream()
+    return gridPositions.stream()
         .filter(gp -> gp.getRowIndex() == row && gp.getColumnIndex() == column)
         .findFirst();
   }

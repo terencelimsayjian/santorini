@@ -5,9 +5,8 @@ import com.terence.santorini.gamelogic.GridPosition;
 import com.terence.santorini.gamelogic.SantoriniGameBoard;
 import com.terence.santorini.gamelogic.SantoriniGameboardMapper;
 import com.terence.santorini.gamelogic.SantoriniWorker;
-import org.springframework.stereotype.Service;
-
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GameService {
@@ -15,7 +14,8 @@ public class GameService {
   private final GameRepository gameRepository;
   private final SantoriniGameboardMapper santoriniGameboardMapper;
 
-  public GameService(GameRepository gameRepository, SantoriniGameboardMapper santoriniGameboardMapper) {
+  public GameService(
+      GameRepository gameRepository, SantoriniGameboardMapper santoriniGameboardMapper) {
     this.gameRepository = gameRepository;
     this.santoriniGameboardMapper = santoriniGameboardMapper;
   }
@@ -29,7 +29,8 @@ public class GameService {
     // Temporary game creation code
     if (optionalGame.isEmpty()) {
       SantoriniGameBoard santoriniGameBoard = SantoriniGameBoard.initiateBoard();
-      JsonGameBoard jsonGameBoard = santoriniGameboardMapper.gameboardToJsonRepresentation(santoriniGameBoard);
+      JsonGameBoard jsonGameBoard =
+          santoriniGameboardMapper.gameboardToJsonRepresentation(santoriniGameBoard);
       GameEntity newGameEntity = new GameEntity();
       newGameEntity.setGameBoard(jsonGameBoard);
       GameEntity save = gameRepository.save(newGameEntity);
@@ -38,7 +39,8 @@ public class GameService {
 
     GameEntity gameEntity = optionalGame.get();
 
-    SantoriniGameBoard santoriniGameBoard = santoriniGameboardMapper.jsonRepresentationToGameboard(gameEntity.getGameBoard());
+    SantoriniGameBoard santoriniGameBoard =
+        santoriniGameboardMapper.jsonRepresentationToGameboard(gameEntity.getGameBoard());
 
     try {
       GridPosition newPosition = GridPosition.valueOf(gameCommand.getNewGridPosition());
@@ -63,8 +65,8 @@ public class GameService {
       e.printStackTrace();
     }
 
-
-    JsonGameBoard jsonGameBoard = santoriniGameboardMapper.gameboardToJsonRepresentation(santoriniGameBoard);
+    JsonGameBoard jsonGameBoard =
+        santoriniGameboardMapper.gameboardToJsonRepresentation(santoriniGameBoard);
 
     gameEntity.setGameBoard(jsonGameBoard);
 

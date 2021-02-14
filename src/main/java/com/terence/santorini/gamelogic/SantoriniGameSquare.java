@@ -6,8 +6,7 @@ public class SantoriniGameSquare {
   private SantoriniWorker santoriniWorker;
   private Integer levels = 0;
 
-  private SantoriniGameSquare() {
-  }
+  private SantoriniGameSquare() {}
 
   private SantoriniGameSquare(SantoriniWorker santoriniWorker, Integer levels) {
     this.santoriniWorker = santoriniWorker;

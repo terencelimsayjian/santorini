@@ -1,9 +1,8 @@
 package com.terence.santorini.game;
 
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -16,6 +15,5 @@ public class JsonGameSquare implements Serializable {
     this.workerId = workerId;
   }
 
-  public JsonGameSquare() {
-  }
+  public JsonGameSquare() {}
 }

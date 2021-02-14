@@ -16,5 +16,4 @@ public class GameCommand {
   private String originalGridPosition;
 
   private String newGridPosition;
-
 }

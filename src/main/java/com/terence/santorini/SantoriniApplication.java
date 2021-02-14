@@ -9,5 +9,4 @@ public class SantoriniApplication {
   public static void main(String[] args) {
     SpringApplication.run(SantoriniApplication.class, args);
   }
-
 }

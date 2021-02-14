@@ -1,17 +1,16 @@
 package com.terence.santorini.game;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
-
+import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.Instant;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Getter
@@ -21,12 +20,15 @@ public class GameEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(generator = "prefix-uuid-generator")
-  @GenericGenerator(name ="prefix-uuid-generator", parameters = @Parameter(name = "prefix", value = "gme"), strategy = "com.terence.santorini.persistence.PrefixUUIDGenerator")
+  @GenericGenerator(
+      name = "prefix-uuid-generator",
+      parameters = @Parameter(name = "prefix", value = "gme"),
+      strategy = "com.terence.santorini.persistence.PrefixUUIDGenerator")
   private String id;
 
   @Type(type = "jsonb")
   @Column(name = "game_board", columnDefinition = "jsonb")
-//  @Convert(converter = GameBoardConverter.class)
+  //  @Convert(converter = GameBoardConverter.class)
   private JsonGameBoard gameBoard;
 
   @Column(name = "player_1")
@@ -46,5 +48,4 @@ public class GameEntity extends BaseEntity {
 
   @Column(name = "updated_at")
   private Instant updatedAt;
-
 }

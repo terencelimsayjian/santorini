@@ -14,11 +14,46 @@ public class SantoriniGameBoard {
   private SantoriniGameBoard() {
     gameBoard = new ArrayList<>(5);
 
-    gameBoard.add(0, Arrays.asList(SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare()));
-    gameBoard.add(1, Arrays.asList(SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare()));
-    gameBoard.add(2, Arrays.asList(SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare()));
-    gameBoard.add(3, Arrays.asList(SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare()));
-    gameBoard.add(4, Arrays.asList(SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare(), SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        0,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        1,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        2,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        3,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        4,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
 
     playerIdGridPositionLookup = new HashMap<>();
   }
@@ -27,7 +62,8 @@ public class SantoriniGameBoard {
     return new SantoriniGameBoard();
   }
 
-  public static SantoriniGameBoard fromGameInProgress(List<List<SantoriniGameSquare>> gameBoardInProgress) {
+  public static SantoriniGameBoard fromGameInProgress(
+      List<List<SantoriniGameSquare>> gameBoardInProgress) {
     SantoriniGameBoard santoriniGameBoard = new SantoriniGameBoard();
     santoriniGameBoard.gameBoard = gameBoardInProgress;
     return santoriniGameBoard;
@@ -66,7 +102,8 @@ public class SantoriniGameBoard {
     santoriniGameSquare.placeWorker(worker);
   }
 
-  public void moveWorker(GridPosition newGridPosition, SantoriniWorker worker) throws GameBoardException {
+  public void moveWorker(GridPosition newGridPosition, SantoriniWorker worker)
+      throws GameBoardException {
     int rowIndex = newGridPosition.getRowIndex();
     int columnIndex = newGridPosition.getColumnIndex();
     List<SantoriniGameSquare> row = gameBoard.get(rowIndex);
@@ -114,8 +151,7 @@ public class SantoriniGameBoard {
     Optional<GridPosition> gp7 = GridPosition.from(rowIndex, columnIndex - 1);
     Optional<GridPosition> gp8 = GridPosition.from(rowIndex - 1, columnIndex - 1);
 
-    return List.of(gp1, gp2, gp3, gp4, gp5, gp6, gp7, gp8)
-        .stream()
+    return List.of(gp1, gp2, gp3, gp4, gp5, gp6, gp7, gp8).stream()
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(Collectors.toList());

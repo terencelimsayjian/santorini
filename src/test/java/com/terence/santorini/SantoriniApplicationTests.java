@@ -6,7 +6,5 @@ import org.junit.jupiter.api.Test;
 class SantoriniApplicationTests extends BaseIntegrationTest {
 
   @Test
-  void contextLoads() {
-  }
-
+  void contextLoads() {}
 }

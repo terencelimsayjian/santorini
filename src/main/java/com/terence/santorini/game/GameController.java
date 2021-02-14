@@ -19,6 +19,5 @@ public class GameController {
     JsonGameBoard jsonGameBoard = gameService.makePlayerMove(gameCommand);
 
     return jsonGameBoard;
-
   }
 }
