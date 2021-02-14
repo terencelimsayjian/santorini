@@ -11,7 +11,7 @@ class SantoriniApplicationTests extends BaseIntegrationTest {
   @Test
   void testContextLoadsWithActuatorEndpoint() {
     ResponseEntity<String> response =
-        testRestTemplate.getForEntity(createUrlWithProt("/management/health"), String.class);
+        testRestTemplate.getForEntity(createUrl("/management/health"), String.class);
 
     assertEquals("{\"status\":\"UP\"}", response.getBody());
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -20,7 +20,7 @@ class SantoriniApplicationTests extends BaseIntegrationTest {
   @Test
   void testContextLoadsWithInfoEndpoint() {
     ResponseEntity<String> response =
-        testRestTemplate.getForEntity(createUrlWithProt("/management/info"), String.class);
+        testRestTemplate.getForEntity(createUrl("/management/info"), String.class);
 
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
   }

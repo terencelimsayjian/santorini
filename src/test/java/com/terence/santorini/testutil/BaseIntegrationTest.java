@@ -23,7 +23,7 @@ public abstract class BaseIntegrationTest {
 
   @Autowired public TestRestTemplate testRestTemplate;
 
-  public String createUrlWithProt(String path) {
+  public String createUrl(String path) {
     return "http://localhost:" + port + path;
   }
 
