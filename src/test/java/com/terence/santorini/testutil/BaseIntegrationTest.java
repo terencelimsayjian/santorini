@@ -1,7 +1,10 @@
 package com.terence.santorini.testutil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -16,6 +19,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration(initializers = BaseIntegrationTest.DockerPostgreDataSourceInitializer.class)
 @Testcontainers
 public abstract class BaseIntegrationTest {
+  @LocalServerPort private int port;
+
+  @Autowired public TestRestTemplate testRestTemplate;
+
+  public String createUrlWithProt(String path) {
+    return "http://localhost:" + port + path;
+  }
 
   public static PostgreSQLContainer<?> postgreDBContainer =
       new PostgreSQLContainer<>("postgres:13.2-alpine").withUsername("postgres");
