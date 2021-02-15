@@ -18,7 +18,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.projectlombok:lombok:1.18.16'
-	implementation 'org.liquibase:liquibase-core'
+//	implementation 'org.liquibase:liquibase-core'
+	runtime 'com.h2database:h2'
 	implementation 'com.vladmihalcea:hibernate-types-52:2.10.2'
 	runtime 'org.postgresql:postgresql:42.2.18'
 
