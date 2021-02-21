@@ -28,7 +28,6 @@ public class GameEntity extends BaseEntity {
 
   @Type(type = "jsonb")
   @Column(name = "game_board", columnDefinition = "jsonb")
-  //  @Convert(converter = GameBoardConverter.class)
   private JsonGameBoard gameBoard;
 
   @Column(name = "player_1")
