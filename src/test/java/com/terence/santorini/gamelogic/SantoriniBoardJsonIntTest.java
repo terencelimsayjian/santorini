@@ -48,12 +48,12 @@ class SantoriniGameBoardSerializerTest {
     void mapPopulatedGameboard() throws GameBoardException {
       SantoriniGameBoard gameBoard = SantoriniGameBoard.initiateBoard();
 
-      gameBoard.placeWorker(GridPosition.A1, "A1");
+      gameBoard.placeWorker(GridPosition.A1, SantoriniPlayer.A);
 
       gameBoard.placeBlock(GridPosition.A2, "A1");
       gameBoard.moveWorker(GridPosition.A2, "A1");
 
-      gameBoard.placeWorker(GridPosition.C3, "B1");
+      gameBoard.placeWorker(GridPosition.C3, SantoriniPlayer.B);
 
       gameBoard.placeBlock(GridPosition.D3, "B1");
       gameBoard.placeBlock(GridPosition.D3, "B1");

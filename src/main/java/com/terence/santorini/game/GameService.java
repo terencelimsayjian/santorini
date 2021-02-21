@@ -4,6 +4,7 @@ import com.terence.santorini.gamelogic.GameBoardException;
 import com.terence.santorini.gamelogic.GridPosition;
 import com.terence.santorini.gamelogic.SantoriniGameBoard;
 import com.terence.santorini.gamelogic.SantoriniGameboardMapper;
+import com.terence.santorini.gamelogic.SantoriniPlayer;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class GameService {
 
       switch (command) {
         case "PLACE_WORKER":
-          santoriniGameBoard.placeWorker(newPosition, workerId);
+          santoriniGameBoard.placeWorker(newPosition, SantoriniPlayer.A);
           break;
         case "MOVE_WORKER":
           santoriniGameBoard.moveWorker(newPosition, workerId);

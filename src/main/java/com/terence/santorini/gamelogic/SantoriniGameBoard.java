@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -11,9 +12,28 @@ public class SantoriniGameBoard {
   List<List<SantoriniGameSquare>> gameBoard;
   HashMap<String, GridPosition> playerIdGridPositionLookup;
 
+  SantoriniPlayer currentPlayer;
+  SantoriniPlayer firstPlayer;
+  List<String> AWorkers = new ArrayList<>();
+  List<String> BWorkers = new ArrayList<>();
+  static final int WORKER_TOTAL = 2;
+
+  Map<SantoriniPlayer, List<String>> playerWorkersInPlay;
+  Map<SantoriniPlayer, List<String>> availablePlayerWorkerPool;
+
   private SantoriniGameBoard() {
     this.gameBoard = emptyBoard();
-    playerIdGridPositionLookup = new HashMap<>();
+    this.playerIdGridPositionLookup = new HashMap<>();
+    this.currentPlayer = SantoriniPlayer.A;
+    this.firstPlayer = SantoriniPlayer.A;
+
+    this.availablePlayerWorkerPool = new HashMap<>();
+    this.availablePlayerWorkerPool.put(SantoriniPlayer.A, List.of("A1", "A2"));
+    this.availablePlayerWorkerPool.put(SantoriniPlayer.B, List.of("B1", "B2"));
+
+    this.playerWorkersInPlay = new HashMap<>();
+    this.playerWorkersInPlay.put(SantoriniPlayer.A, new ArrayList<>());
+    this.playerWorkersInPlay.put(SantoriniPlayer.B, new ArrayList<>());
   }
 
   public static SantoriniGameBoard initiateBoard() {
@@ -37,20 +57,38 @@ public class SantoriniGameBoard {
     santoriniGameSquare.placeNextBlock();
   }
 
-  public void placeWorker(GridPosition grid, String workerId) throws GameBoardException {
+  public void placeWorker(GridPosition grid, SantoriniPlayer player) throws GameBoardException {
     int rowIndex = grid.getRowIndex();
     int columnIndex = grid.getColumnIndex();
 
     List<SantoriniGameSquare> row = gameBoard.get(rowIndex);
     SantoriniGameSquare santoriniGameSquare = row.get(columnIndex);
 
+    String workerId = getNextWorkerId(player);
+
     if (playerIdGridPositionLookup.get(workerId) != null) {
       throw new GameBoardException("Worker already exsts");
     }
 
-    playerIdGridPositionLookup.put(workerId, grid);
-
     santoriniGameSquare.placeWorker(workerId);
+    playerIdGridPositionLookup.put(workerId, grid);
+    playerWorkersInPlay.get(player).add(workerId);
+  }
+
+  private String getNextWorkerId(SantoriniPlayer player) throws GameBoardException {
+    List<String> workers = this.playerWorkersInPlay.get(player);
+
+    if (workers.size() >= WORKER_TOTAL) {
+      throw new GameBoardException("Maximum number of workers reached");
+    }
+
+    if (workers.size() == 0) {
+      return this.availablePlayerWorkerPool.get(player).get(0);
+    } else if (workers.size() == 1) {
+      return this.availablePlayerWorkerPool.get(player).get(1);
+    } else {
+      throw new GameBoardException("Maximum number of workers reached");
+    }
   }
 
   public void moveWorker(GridPosition newGridPosition, String workerId) throws GameBoardException {
