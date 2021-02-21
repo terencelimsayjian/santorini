@@ -62,13 +62,6 @@ public class SantoriniGameBoard {
     return new SantoriniGameBoard();
   }
 
-  public static SantoriniGameBoard fromGameInProgress(
-      List<List<SantoriniGameSquare>> gameBoardInProgress) {
-    SantoriniGameBoard santoriniGameBoard = new SantoriniGameBoard();
-    santoriniGameBoard.gameBoard = gameBoardInProgress;
-    return santoriniGameBoard;
-  }
-
   public void placeBlock(GridPosition grid, String workerId) throws GameBoardException {
     GridPosition workerGridPosition = playerIdGridPositionLookup.get(workerId);
 
