@@ -12,49 +12,7 @@ public class SantoriniGameBoard {
   HashMap<String, GridPosition> playerIdGridPositionLookup;
 
   private SantoriniGameBoard() {
-    gameBoard = new ArrayList<>(5);
-
-    gameBoard.add(
-        0,
-        Arrays.asList(
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare()));
-    gameBoard.add(
-        1,
-        Arrays.asList(
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare()));
-    gameBoard.add(
-        2,
-        Arrays.asList(
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare()));
-    gameBoard.add(
-        3,
-        Arrays.asList(
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare()));
-    gameBoard.add(
-        4,
-        Arrays.asList(
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare(),
-            SantoriniGameSquare.initiateEmptySquare()));
-
+    this.gameBoard = emptyBoard();
     playerIdGridPositionLookup = new HashMap<>();
   }
 
@@ -162,5 +120,52 @@ public class SantoriniGameBoard {
 
   private SantoriniGameSquare getSquare(GridPosition gridPosition) {
     return gameBoard.get(gridPosition.getRowIndex()).get(gridPosition.getColumnIndex());
+  }
+
+  private ArrayList<List<SantoriniGameSquare>> emptyBoard() {
+    ArrayList<List<SantoriniGameSquare>> gameBoard = new ArrayList<>(5);
+
+    gameBoard.add(
+        0,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        1,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        2,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        3,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+    gameBoard.add(
+        4,
+        Arrays.asList(
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare(),
+            SantoriniGameSquare.initiateEmptySquare()));
+
+    return gameBoard;
   }
 }
