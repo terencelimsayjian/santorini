@@ -15,6 +15,7 @@ public class SantoriniGameBoard {
   Map<SantoriniPlayer, List<String>> availablePlayerWorkerPool;
   SantoriniPlayer currentPlayer;
   SantoriniPlayer firstPlayer;
+  boolean workerPlacementStepComplete = false;
 
   private SantoriniGameBoard() {
     this.gameBoard = emptyBoard();

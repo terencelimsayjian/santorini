@@ -43,72 +43,6 @@ class SantoriniGameBoardTest {
   }
 
   @Nested
-  class PlaceBlocks {
-    @ParameterizedTest
-    @CsvFileSource(
-        resources = {"/legal-moves.csv"},
-        numLinesToSkip = 1)
-    void shouldAllowLegalBlockPlacement(
-        String workerPosition, int row, int column, String newPosition) throws GameBoardException {
-      GridPosition placeBlockGridPosition = GridPosition.valueOf(newPosition);
-      GridPosition workerGridPosition = GridPosition.valueOf(workerPosition);
-
-      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
-
-      board.placeWorker(workerGridPosition, SantoriniPlayer.A);
-      board.placeBlock(placeBlockGridPosition, "A1");
-
-      List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
-
-      assertEquals(1, gameBoard.get(row).get(column).getLevels());
-    }
-
-    @ParameterizedTest
-    @CsvFileSource(
-        resources = {"/illegal-moves.csv"},
-        numLinesToSkip = 1)
-    void shouldThrowExceptionIfWorkerIsNotAdjacentToPlacedBlock(
-        String workerPosition, String newPosition) throws GameBoardException {
-      GridPosition placeBlockGridPosition = GridPosition.valueOf(newPosition);
-      GridPosition workerGridPosition = GridPosition.valueOf(workerPosition);
-
-      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
-
-      board.placeWorker(workerGridPosition, SantoriniPlayer.A);
-
-      GameBoardException e =
-          assertThrows(
-              GameBoardException.class, () -> board.placeBlock(placeBlockGridPosition, "A1"));
-      assertEquals("Must place block on adjacent square", e.getMessage());
-    }
-
-    @Test
-    void shouldAllowExceptionToBubbleUpIfBlockHeightExceeds() throws GameBoardException {
-      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
-
-      board.placeWorker(GridPosition.D2, SantoriniPlayer.A);
-      board.placeBlock(GridPosition.D1, "A1");
-      board.placeBlock(GridPosition.D1, "A1");
-      board.placeBlock(GridPosition.D1, "A1");
-      board.placeBlock(GridPosition.D1, "A1");
-      assertThrows(GameBoardException.class, () -> board.placeBlock(GridPosition.D1, "A1"));
-    }
-
-    @ParameterizedTest
-    @EnumSource(GridPosition.class)
-    void shouldThrowExceptionIfPlaceBlockOnSquareWithAWorker(GridPosition gridPosition)
-        throws GameBoardException {
-      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
-
-      board.placeWorker(gridPosition, SantoriniPlayer.A);
-
-      GameBoardException e =
-          assertThrows(GameBoardException.class, () -> board.placeBlock(gridPosition, "A1"));
-      assertEquals("Worker already occupies square", e.getMessage());
-    }
-  }
-
-  @Nested
   class PlaceWorker {
     @ParameterizedTest
     @CsvFileSource(
@@ -339,6 +273,72 @@ class SantoriniGameBoardTest {
       GameBoardException e =
           assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.A1, "A1"));
       assertEquals("Cannot move worker to same square", e.getMessage());
+    }
+  }
+
+  @Nested
+  class PlaceBlocks {
+    @ParameterizedTest
+    @CsvFileSource(
+        resources = {"/legal-moves.csv"},
+        numLinesToSkip = 1)
+    void shouldAllowLegalBlockPlacement(
+        String workerPosition, int row, int column, String newPosition) throws GameBoardException {
+      GridPosition placeBlockGridPosition = GridPosition.valueOf(newPosition);
+      GridPosition workerGridPosition = GridPosition.valueOf(workerPosition);
+
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
+
+      board.placeWorker(workerGridPosition, SantoriniPlayer.A);
+      board.placeBlock(placeBlockGridPosition, "A1");
+
+      List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
+
+      assertEquals(1, gameBoard.get(row).get(column).getLevels());
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(
+        resources = {"/illegal-moves.csv"},
+        numLinesToSkip = 1)
+    void shouldThrowExceptionIfWorkerIsNotAdjacentToPlacedBlock(
+        String workerPosition, String newPosition) throws GameBoardException {
+      GridPosition placeBlockGridPosition = GridPosition.valueOf(newPosition);
+      GridPosition workerGridPosition = GridPosition.valueOf(workerPosition);
+
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
+
+      board.placeWorker(workerGridPosition, SantoriniPlayer.A);
+
+      GameBoardException e =
+          assertThrows(
+              GameBoardException.class, () -> board.placeBlock(placeBlockGridPosition, "A1"));
+      assertEquals("Must place block on adjacent square", e.getMessage());
+    }
+
+    @Test
+    void shouldAllowExceptionToBubbleUpIfBlockHeightExceeds() throws GameBoardException {
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
+
+      board.placeWorker(GridPosition.D2, SantoriniPlayer.A);
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      assertThrows(GameBoardException.class, () -> board.placeBlock(GridPosition.D1, "A1"));
+    }
+
+    @ParameterizedTest
+    @EnumSource(GridPosition.class)
+    void shouldThrowExceptionIfPlaceBlockOnSquareWithAWorker(GridPosition gridPosition)
+        throws GameBoardException {
+      SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
+
+      board.placeWorker(gridPosition, SantoriniPlayer.A);
+
+      GameBoardException e =
+          assertThrows(GameBoardException.class, () -> board.placeBlock(gridPosition, "A1"));
+      assertEquals("Worker already occupies square", e.getMessage());
     }
   }
 
