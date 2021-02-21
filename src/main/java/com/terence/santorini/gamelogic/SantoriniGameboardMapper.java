@@ -32,7 +32,7 @@ public class SantoriniGameboardMapper {
   }
 
   private JsonGameSquare toJsonSquareRepresentation(SantoriniGameSquare santoriniGameSquare) {
-    String workerId = santoriniGameSquare.getWorker().map(SantoriniWorker::getId).orElse(null);
+    String workerId = santoriniGameSquare.getWorker().orElse(null);
 
     return new JsonGameSquare(santoriniGameSquare.getLevels(), workerId);
   }

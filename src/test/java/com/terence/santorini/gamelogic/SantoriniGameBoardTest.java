@@ -30,10 +30,8 @@ class SantoriniGameBoardTest {
 
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      SantoriniWorker a1worker = new SantoriniWorker("A1");
-
-      board.placeWorker(workerGridPosition, a1worker);
-      board.placeBlock(placeBlockGridPosition, a1worker);
+      board.placeWorker(workerGridPosition, "A1");
+      board.placeBlock(placeBlockGridPosition, "A1");
 
       List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
 
@@ -51,26 +49,24 @@ class SantoriniGameBoardTest {
 
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      SantoriniWorker worker = new SantoriniWorker("A1");
-      board.placeWorker(workerGridPosition, worker);
+      board.placeWorker(workerGridPosition, "A1");
 
       GameBoardException e =
           assertThrows(
-              GameBoardException.class, () -> board.placeBlock(placeBlockGridPosition, worker));
+              GameBoardException.class, () -> board.placeBlock(placeBlockGridPosition, "A1"));
       assertEquals("Must place block on adjacent square", e.getMessage());
     }
 
     @Test
     void shouldAllowExceptionToBubbleUpIfBlockHeightExceeds() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
-      SantoriniWorker worker = new SantoriniWorker("A1");
 
-      board.placeWorker(GridPosition.D2, worker);
-      board.placeBlock(GridPosition.D1, worker);
-      board.placeBlock(GridPosition.D1, worker);
-      board.placeBlock(GridPosition.D1, worker);
-      board.placeBlock(GridPosition.D1, worker);
-      assertThrows(GameBoardException.class, () -> board.placeBlock(GridPosition.D1, worker));
+      board.placeWorker(GridPosition.D2, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      assertThrows(GameBoardException.class, () -> board.placeBlock(GridPosition.D1, "A1"));
     }
 
     @ParameterizedTest
@@ -79,11 +75,10 @@ class SantoriniGameBoardTest {
         throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      SantoriniWorker worker = new SantoriniWorker("A1");
-      board.placeWorker(gridPosition, worker);
+      board.placeWorker(gridPosition, "A1");
 
       GameBoardException e =
-          assertThrows(GameBoardException.class, () -> board.placeBlock(gridPosition, worker));
+          assertThrows(GameBoardException.class, () -> board.placeBlock(gridPosition, "A1"));
       assertEquals("Worker already occupies square", e.getMessage());
     }
   }
@@ -99,7 +94,7 @@ class SantoriniGameBoardTest {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       GridPosition grid = GridPosition.valueOf(santoriniGrid);
-      board.placeWorker(grid, new SantoriniWorker("1"));
+      board.placeWorker(grid, "A1");
 
       List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
 
@@ -111,11 +106,9 @@ class SantoriniGameBoardTest {
         throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      board.placeWorker(GridPosition.D1, new SantoriniWorker("1"));
+      board.placeWorker(GridPosition.D1, "A1");
       GameBoardException e =
-          assertThrows(
-              GameBoardException.class,
-              () -> board.placeWorker(GridPosition.D1, new SantoriniWorker("1")));
+          assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, "A1"));
       assertEquals("Worker already exsts", e.getMessage());
     }
 
@@ -123,25 +116,20 @@ class SantoriniGameBoardTest {
     void shouldAllowExceptionToBubbleUpIfWorkerIsPlacedInOccupiedSlot() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      board.placeWorker(GridPosition.D1, new SantoriniWorker("1"));
-      assertThrows(
-          GameBoardException.class,
-          () -> board.placeWorker(GridPosition.D1, new SantoriniWorker("1")));
+      board.placeWorker(GridPosition.D1, "A1");
+      assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, "A1"));
     }
 
     @Test
     void shouldAllowExceptionToBubbleUpIfWorkerIsPlacedOnDome() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
-      SantoriniWorker worker = new SantoriniWorker("A1");
 
-      board.placeWorker(GridPosition.D2, worker);
-      board.placeBlock(GridPosition.D1, worker);
-      board.placeBlock(GridPosition.D1, worker);
-      board.placeBlock(GridPosition.D1, worker);
-      board.placeBlock(GridPosition.D1, worker);
-      assertThrows(
-          GameBoardException.class,
-          () -> board.placeWorker(GridPosition.D1, new SantoriniWorker("1")));
+      board.placeWorker(GridPosition.D2, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      board.placeBlock(GridPosition.D1, "A1");
+      assertThrows(GameBoardException.class, () -> board.placeWorker(GridPosition.D1, "A1"));
     }
   }
 
@@ -151,14 +139,13 @@ class SantoriniGameBoardTest {
     @CsvFileSource(resources = "/legal-moves.csv", numLinesToSkip = 1)
     void shouldMoveWorkerIfLegal(String workerPosition, int row, int column, String newPosition)
         throws GameBoardException {
-      SantoriniWorker worker = new SantoriniWorker("A1");
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       GridPosition newGridPosition = GridPosition.valueOf(newPosition);
       GridPosition originalGridPosition = GridPosition.valueOf(workerPosition);
 
-      board.placeWorker(originalGridPosition, worker);
-      board.moveWorker(newGridPosition, worker);
+      board.placeWorker(originalGridPosition, "A1");
+      board.moveWorker(newGridPosition, "A1");
 
       List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
 
@@ -175,52 +162,48 @@ class SantoriniGameBoardTest {
         numLinesToSkip = 1)
     void shouldThrowExceptionIfTryToMoveWorkerMoreThanOneSpotAway(
         String workerPosition, String newPosition) throws GameBoardException {
-      SantoriniWorker worker = new SantoriniWorker("1");
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       GridPosition originalWorkerGridPosition = GridPosition.valueOf(workerPosition);
       GridPosition newGridPosition = GridPosition.valueOf(newPosition);
 
-      board.placeWorker(originalWorkerGridPosition, worker);
+      board.placeWorker(originalWorkerGridPosition, "A1");
 
       GameBoardException e =
-          assertThrows(GameBoardException.class, () -> board.moveWorker(newGridPosition, worker));
+          assertThrows(GameBoardException.class, () -> board.moveWorker(newGridPosition, "A1"));
       assertEquals("Must move worker to adjacent square", e.getMessage());
     }
 
     @Test
     void shouldThrowExceptionIfWorkerAttemptsToMoveUpMoreThanOneBlockHeight()
         throws GameBoardException {
-      SantoriniWorker worker = new SantoriniWorker("A1");
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      board.placeWorker(GridPosition.B3, worker);
-      board.placeBlock(GridPosition.B4, worker);
-      board.placeBlock(GridPosition.B4, worker);
+      board.placeWorker(GridPosition.B3, "A1");
+      board.placeBlock(GridPosition.B4, "A1");
+      board.placeBlock(GridPosition.B4, "A1");
 
       GameBoardException e =
-          assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.B4, worker));
+          assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.B4, "A1"));
       assertEquals("Worker can move up maximum of one level higher", e.getMessage());
     }
 
     @Test
     void shouldThrowExceptionIfWorkerIdIsNotFound() {
-      SantoriniWorker worker = new SantoriniWorker("1");
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       GameBoardException e =
-          assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.B5, worker));
+          assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.B5, "A1"));
       assertEquals("Worker does not exist on board", e.getMessage());
     }
 
     @Test
     void shouldThrowExceptionIfTryToMoveWorkerToSameSpot() throws GameBoardException {
-      SantoriniWorker worker = new SantoriniWorker("1");
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      board.placeWorker(GridPosition.A1, worker);
+      board.placeWorker(GridPosition.A1, "A1");
       GameBoardException e =
-          assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.A1, worker));
+          assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.A1, "A1"));
       assertEquals("Cannot move worker to same square", e.getMessage());
     }
   }
@@ -231,59 +214,55 @@ class SantoriniGameBoardTest {
     void shouldReturnTrueWithBasicWinCondition() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      SantoriniWorker worker = new SantoriniWorker("A1");
-      board.placeWorker(GridPosition.A1, worker);
-      board.placeBlock(GridPosition.A2, worker);
+      board.placeWorker(GridPosition.A1, "A1");
+      board.placeBlock(GridPosition.A2, "A1");
 
-      board.moveWorker(GridPosition.A2, worker);
-      board.placeBlock(GridPosition.A3, worker);
-      board.placeBlock(GridPosition.A3, worker);
+      board.moveWorker(GridPosition.A2, "A1");
+      board.placeBlock(GridPosition.A3, "A1");
+      board.placeBlock(GridPosition.A3, "A1");
 
-      board.moveWorker(GridPosition.A3, worker);
-      board.placeBlock(GridPosition.A4, worker);
-      board.placeBlock(GridPosition.A4, worker);
-      board.placeBlock(GridPosition.A4, worker);
+      board.moveWorker(GridPosition.A3, "A1");
+      board.placeBlock(GridPosition.A4, "A1");
+      board.placeBlock(GridPosition.A4, "A1");
+      board.placeBlock(GridPosition.A4, "A1");
 
-      board.moveWorker(GridPosition.A4, worker);
-      assertTrue(board.isWin(worker));
+      board.moveWorker(GridPosition.A4, "A1");
+      assertTrue(board.isWin("A1"));
     }
 
     @Test
     void shouldNotReturnTrueWithWorkerOnLevel2() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      SantoriniWorker worker = new SantoriniWorker("A1");
-      board.placeWorker(GridPosition.A1, worker);
-      board.placeBlock(GridPosition.A2, worker);
+      board.placeWorker(GridPosition.A1, "A1");
+      board.placeBlock(GridPosition.A2, "A1");
 
-      board.moveWorker(GridPosition.A2, worker);
-      board.placeBlock(GridPosition.A3, worker);
-      board.placeBlock(GridPosition.A3, worker);
+      board.moveWorker(GridPosition.A2, "A1");
+      board.placeBlock(GridPosition.A3, "A1");
+      board.placeBlock(GridPosition.A3, "A1");
 
-      board.moveWorker(GridPosition.A3, worker);
-      assertFalse(board.isWin(worker));
+      board.moveWorker(GridPosition.A3, "A1");
+      assertFalse(board.isWin("A1"));
     }
 
     @Test
     void shouldNotReturnTrueWithWorkerOnLevel1() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      SantoriniWorker worker = new SantoriniWorker("A1");
-      board.placeWorker(GridPosition.A1, worker);
-      board.placeBlock(GridPosition.A2, worker);
+      board.placeWorker(GridPosition.A1, "A1");
+      board.placeBlock(GridPosition.A2, "A1");
 
-      board.moveWorker(GridPosition.A2, worker);
-      assertFalse(board.isWin(worker));
+      board.moveWorker(GridPosition.A2, "A1");
+      assertFalse(board.isWin("A1"));
     }
 
     @Test
     void shouldNotReturnTrueWithWorkerOnLevel0() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      SantoriniWorker worker = new SantoriniWorker("A1");
-      board.placeWorker(GridPosition.A1, worker);
-      board.moveWorker(GridPosition.A2, worker);
-      assertFalse(board.isWin(worker));
+      board.placeWorker(GridPosition.A1, "A1");
+      board.moveWorker(GridPosition.A2, "A1");
+      assertFalse(board.isWin("A1"));
     }
   }
 

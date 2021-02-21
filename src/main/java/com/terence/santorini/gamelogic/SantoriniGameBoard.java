@@ -69,8 +69,8 @@ public class SantoriniGameBoard {
     return santoriniGameBoard;
   }
 
-  public void placeBlock(GridPosition grid, SantoriniWorker worker) throws GameBoardException {
-    GridPosition workerGridPosition = playerIdGridPositionLookup.get(worker.getId());
+  public void placeBlock(GridPosition grid, String workerId) throws GameBoardException {
+    GridPosition workerGridPosition = playerIdGridPositionLookup.get(workerId);
 
     if (workerGridPosition == grid) {
       throw new GameBoardException("Worker already occupies square");
@@ -86,30 +86,29 @@ public class SantoriniGameBoard {
     santoriniGameSquare.placeNextBlock();
   }
 
-  public void placeWorker(GridPosition grid, SantoriniWorker worker) throws GameBoardException {
+  public void placeWorker(GridPosition grid, String workerId) throws GameBoardException {
     int rowIndex = grid.getRowIndex();
     int columnIndex = grid.getColumnIndex();
 
     List<SantoriniGameSquare> row = gameBoard.get(rowIndex);
     SantoriniGameSquare santoriniGameSquare = row.get(columnIndex);
 
-    if (playerIdGridPositionLookup.get(worker.getId()) != null) {
+    if (playerIdGridPositionLookup.get(workerId) != null) {
       throw new GameBoardException("Worker already exsts");
     }
 
-    playerIdGridPositionLookup.put(worker.getId(), grid);
+    playerIdGridPositionLookup.put(workerId, grid);
 
-    santoriniGameSquare.placeWorker(worker);
+    santoriniGameSquare.placeWorker(workerId);
   }
 
-  public void moveWorker(GridPosition newGridPosition, SantoriniWorker worker)
-      throws GameBoardException {
+  public void moveWorker(GridPosition newGridPosition, String workerId) throws GameBoardException {
     int rowIndex = newGridPosition.getRowIndex();
     int columnIndex = newGridPosition.getColumnIndex();
     List<SantoriniGameSquare> row = gameBoard.get(rowIndex);
     SantoriniGameSquare squareToMoveTo = row.get(columnIndex);
 
-    GridPosition currentWorkerPosition = playerIdGridPositionLookup.get(worker.getId());
+    GridPosition currentWorkerPosition = playerIdGridPositionLookup.get(workerId);
 
     if (currentWorkerPosition == null) {
       throw new GameBoardException("Worker does not exist on board");
@@ -133,8 +132,8 @@ public class SantoriniGameBoard {
     }
 
     currentWorkerSquare.removeWorker();
-    squareToMoveTo.placeWorker(worker);
-    playerIdGridPositionLookup.put(worker.getId(), newGridPosition);
+    squareToMoveTo.placeWorker(workerId);
+    playerIdGridPositionLookup.put(workerId, newGridPosition);
   }
 
   List<GridPosition> getLegalGridPositions(GridPosition currentGridPosition) {
@@ -157,8 +156,8 @@ public class SantoriniGameBoard {
         .collect(Collectors.toList());
   }
 
-  public boolean isWin(SantoriniWorker worker) {
-    GridPosition currentGridPosition = playerIdGridPositionLookup.get(worker.getId());
+  public boolean isWin(String workerId) {
+    GridPosition currentGridPosition = playerIdGridPositionLookup.get(workerId);
     SantoriniGameSquare square = getSquare(currentGridPosition);
 
     if (square.getWorker().isPresent() && square.getLevels() == 3) {

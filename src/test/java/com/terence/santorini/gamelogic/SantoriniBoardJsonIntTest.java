@@ -48,18 +48,16 @@ class SantoriniGameBoardSerializerTest {
     void mapPopulatedGameboard() throws GameBoardException {
       SantoriniGameBoard gameBoard = SantoriniGameBoard.initiateBoard();
 
-      SantoriniWorker a1Worker = new SantoriniWorker("A1");
-      gameBoard.placeWorker(GridPosition.A1, a1Worker);
+      gameBoard.placeWorker(GridPosition.A1, "A1");
 
-      gameBoard.placeBlock(GridPosition.A2, a1Worker);
-      gameBoard.moveWorker(GridPosition.A2, a1Worker);
+      gameBoard.placeBlock(GridPosition.A2, "A1");
+      gameBoard.moveWorker(GridPosition.A2, "A1");
 
-      SantoriniWorker b1Worker = new SantoriniWorker("B1");
-      gameBoard.placeWorker(GridPosition.C3, b1Worker);
+      gameBoard.placeWorker(GridPosition.C3, "B1");
 
-      gameBoard.placeBlock(GridPosition.D3, b1Worker);
-      gameBoard.placeBlock(GridPosition.D3, b1Worker);
-      gameBoard.moveWorker(GridPosition.B4, b1Worker);
+      gameBoard.placeBlock(GridPosition.D3, "B1");
+      gameBoard.placeBlock(GridPosition.D3, "B1");
+      gameBoard.moveWorker(GridPosition.B4, "B1");
 
       JsonGameBoard jsonGameBoard =
           santoriniGameboardMapper.gameboardToJsonRepresentation(gameBoard);
@@ -180,7 +178,7 @@ class SantoriniGameBoardSerializerTest {
           gameBoard.get(GridPosition.A1.getRowIndex()).get(GridPosition.A1.getColumnIndex());
       assertEquals(1, a1Square.getLevels());
       assertTrue(a1Square.getWorker().isPresent());
-      assertEquals("A1", a1Square.getWorker().get().getId());
+      assertEquals("A1", a1Square.getWorker().get());
 
       SantoriniGameSquare b2Square =
           gameBoard.get(GridPosition.B2.getRowIndex()).get(GridPosition.B2.getColumnIndex());
@@ -196,13 +194,13 @@ class SantoriniGameBoardSerializerTest {
           gameBoard.get(GridPosition.D4.getRowIndex()).get(GridPosition.D4.getColumnIndex());
       assertEquals(3, d4Square.getLevels());
       assertTrue(d4Square.getWorker().isPresent());
-      assertEquals("B1", d4Square.getWorker().get().getId());
+      assertEquals("B1", d4Square.getWorker().get());
 
       SantoriniGameSquare e5Square =
           gameBoard.get(GridPosition.E5.getRowIndex()).get(GridPosition.E5.getColumnIndex());
       assertEquals(0, e5Square.getLevels());
       assertTrue(e5Square.getWorker().isPresent());
-      assertEquals("B2", e5Square.getWorker().get().getId());
+      assertEquals("B2", e5Square.getWorker().get());
 
       HashMap<String, GridPosition> playerIdGridPositionLookup =
           santoriniGameBoard.playerIdGridPositionLookup;

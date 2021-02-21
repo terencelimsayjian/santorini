@@ -3,14 +3,14 @@ package com.terence.santorini.gamelogic;
 import java.util.Optional;
 
 public class SantoriniGameSquare {
-  private SantoriniWorker santoriniWorker;
   private Integer levels = 0;
+  private String workerId;
 
   private SantoriniGameSquare() {}
 
-  private SantoriniGameSquare(SantoriniWorker santoriniWorker, Integer levels) {
-    this.santoriniWorker = santoriniWorker;
+  private SantoriniGameSquare(String workerId, Integer levels) {
     this.levels = levels;
+    this.workerId = workerId;
   }
 
   public static SantoriniGameSquare initiateEmptySquare() {
@@ -18,24 +18,23 @@ public class SantoriniGameSquare {
   }
 
   static SantoriniGameSquare fromExistingSquare(String workerId, Integer levels) {
-    SantoriniWorker worker = workerId != null ? new SantoriniWorker(workerId) : null;
-    return new SantoriniGameSquare(worker, levels);
+    return new SantoriniGameSquare(workerId, levels);
   }
 
-  public void placeWorker(SantoriniWorker worker) throws GameBoardException {
+  public void placeWorker(String workerId) throws GameBoardException {
     if (isDome()) {
       throw new GameBoardException("Cannot place worker on a dome");
     }
 
-    if (santoriniWorker != null) {
+    if (this.workerId != null) {
       throw new GameBoardException("Another worker occupies this spot");
     }
 
-    santoriniWorker = worker;
+    this.workerId = workerId;
   }
 
-  public Optional<SantoriniWorker> getWorker() {
-    return Optional.ofNullable(santoriniWorker);
+  public Optional<String> getWorker() {
+    return Optional.ofNullable(workerId);
   }
 
   public void placeNextBlock() throws GameBoardException {
@@ -55,6 +54,6 @@ public class SantoriniGameSquare {
   }
 
   public void removeWorker() {
-    santoriniWorker = null;
+    workerId = null;
   }
 }
