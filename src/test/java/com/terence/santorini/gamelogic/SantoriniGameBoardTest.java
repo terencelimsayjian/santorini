@@ -59,10 +59,12 @@ class SantoriniGameBoardTest {
 
       assertTrue(gameBoard.get(row).get(column).getWorker().isPresent());
       assertEquals("A1", gameBoard.get(row).get(column).getWorker().get());
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
+      assertFalse(board.workerPlacementStepComplete);
     }
 
     @Test
-    void shouldPlaceSecondWorkerOnBoard() throws GameBoardException {
+    void shouldPlaceSecondWorkerOnBoardAndSwitchCurrentPlayer() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
       board.placeWorker(GridPosition.D1, SantoriniPlayer.A);
@@ -96,6 +98,10 @@ class SantoriniGameBoardTest {
               .get(GridPosition.B1.getColumnIndex())
               .getWorker()
               .get());
+
+      assertEquals(SantoriniPlayer.B, board.currentPlayer);
+      assertFalse(board.workerPlacementStepComplete);
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
     }
 
     @Test
@@ -109,6 +115,8 @@ class SantoriniGameBoardTest {
               GameBoardException.class,
               () -> board.placeWorker(GridPosition.E1, SantoriniPlayer.A));
       assertEquals("Maximum number of workers reached", e.getMessage());
+      assertFalse(board.workerPlacementStepComplete);
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
     }
 
     @Test
@@ -117,10 +125,15 @@ class SantoriniGameBoardTest {
 
       board.placeWorker(GridPosition.D1, SantoriniPlayer.A);
       board.placeWorker(GridPosition.B1, SantoriniPlayer.A);
+      assertEquals(SantoriniPlayer.B, board.currentPlayer);
+
       board.placeWorker(GridPosition.E1, SantoriniPlayer.B);
       board.placeWorker(GridPosition.E2, SantoriniPlayer.B);
+      assertEquals(SantoriniPlayer.A, board.currentPlayer);
 
       List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
+      assertTrue(board.workerPlacementStepComplete);
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
       assertTrue(
           gameBoard
               .get(GridPosition.D1.getRowIndex())
@@ -222,6 +235,7 @@ class SantoriniGameBoardTest {
       int oldRow = originalGridPosition.getRowIndex();
       int oldColumn = originalGridPosition.getColumnIndex();
       assertFalse(gameBoard.get(oldRow).get(oldColumn).getWorker().isPresent());
+      assertTrue(board.workerMovedAndAwaitingBlockPlacement);
     }
 
     @ParameterizedTest
@@ -240,6 +254,7 @@ class SantoriniGameBoardTest {
       GameBoardException e =
           assertThrows(GameBoardException.class, () -> board.moveWorker(newGridPosition, "A1"));
       assertEquals("Must move worker to adjacent square", e.getMessage());
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
     }
 
     @Test
@@ -254,6 +269,7 @@ class SantoriniGameBoardTest {
       GameBoardException e =
           assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.B4, "A1"));
       assertEquals("Worker can move up maximum of one level higher", e.getMessage());
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
     }
 
     @Test
@@ -263,6 +279,7 @@ class SantoriniGameBoardTest {
       GameBoardException e =
           assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.B5, "A1"));
       assertEquals("Worker does not exist on board", e.getMessage());
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
     }
 
     @Test
@@ -273,6 +290,7 @@ class SantoriniGameBoardTest {
       GameBoardException e =
           assertThrows(GameBoardException.class, () -> board.moveWorker(GridPosition.A1, "A1"));
       assertEquals("Cannot move worker to same square", e.getMessage());
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
     }
   }
 
@@ -289,12 +307,15 @@ class SantoriniGameBoardTest {
 
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      board.placeWorker(workerGridPosition, SantoriniPlayer.A);
+      board.placeWorker(placeBlockGridPosition, SantoriniPlayer.A);
+      board.moveWorker(workerGridPosition, "A1");
       board.placeBlock(placeBlockGridPosition, "A1");
 
       List<List<SantoriniGameSquare>> gameBoard = board.gameBoard;
 
       assertEquals(1, gameBoard.get(row).get(column).getLevels());
+      assertEquals(SantoriniPlayer.B, board.currentPlayer);
+      assertFalse(board.workerMovedAndAwaitingBlockPlacement);
     }
 
     @ParameterizedTest
@@ -314,18 +335,21 @@ class SantoriniGameBoardTest {
           assertThrows(
               GameBoardException.class, () -> board.placeBlock(placeBlockGridPosition, "A1"));
       assertEquals("Must place block on adjacent square", e.getMessage());
+      assertEquals(SantoriniPlayer.A, board.currentPlayer);
     }
 
     @Test
     void shouldAllowExceptionToBubbleUpIfBlockHeightExceeds() throws GameBoardException {
       SantoriniGameBoard board = SantoriniGameBoard.initiateBoard();
 
-      board.placeWorker(GridPosition.D2, SantoriniPlayer.A);
+      board.placeWorker(GridPosition.D1, SantoriniPlayer.A);
+      board.moveWorker(GridPosition.D2, "A1");
       board.placeBlock(GridPosition.D1, "A1");
       board.placeBlock(GridPosition.D1, "A1");
       board.placeBlock(GridPosition.D1, "A1");
       board.placeBlock(GridPosition.D1, "A1");
       assertThrows(GameBoardException.class, () -> board.placeBlock(GridPosition.D1, "A1"));
+      assertEquals(SantoriniPlayer.A, board.currentPlayer);
     }
 
     @ParameterizedTest
@@ -339,6 +363,7 @@ class SantoriniGameBoardTest {
       GameBoardException e =
           assertThrows(GameBoardException.class, () -> board.placeBlock(gridPosition, "A1"));
       assertEquals("Worker already occupies square", e.getMessage());
+      assertEquals(SantoriniPlayer.A, board.currentPlayer);
     }
   }
 

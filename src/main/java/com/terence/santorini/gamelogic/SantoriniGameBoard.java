@@ -16,6 +16,11 @@ public class SantoriniGameBoard {
   SantoriniPlayer currentPlayer;
   SantoriniPlayer firstPlayer;
   boolean workerPlacementStepComplete = false;
+  boolean workerMovedAndAwaitingBlockPlacement = false;
+  // Probably need state to determine placeWorker and placeBlock step
+  // TODO: Place worker steps (Throw validation error if try to make move before place workers)
+  // TODO: Place block step (Has to be current player, who has moved a worker)
+  // TODO: Wait for sockets to implement? Easier to test
 
   private SantoriniGameBoard() {
     this.gameBoard = emptyBoard();
@@ -51,6 +56,8 @@ public class SantoriniGameBoard {
 
     SantoriniGameSquare santoriniGameSquare = getSquare(grid);
     santoriniGameSquare.placeNextBlock();
+    workerMovedAndAwaitingBlockPlacement = false;
+    swapCurrentPlayer();
   }
 
   public void placeWorker(GridPosition grid, SantoriniPlayer player) throws GameBoardException {
@@ -69,6 +76,19 @@ public class SantoriniGameBoard {
     santoriniGameSquare.placeWorker(workerId);
     playerIdGridPositionLookup.put(workerId, grid);
     playerWorkersInPlay.get(player).add(workerId);
+
+    if (hasPlacedAllAvailableWorkers(player)) {
+      swapCurrentPlayer();
+
+      if (hasPlacedAllAvailableWorkers(SantoriniPlayer.A)
+          && hasPlacedAllAvailableWorkers(SantoriniPlayer.B)) {
+        workerPlacementStepComplete = true;
+      }
+    }
+  }
+
+  private boolean hasPlacedAllAvailableWorkers(SantoriniPlayer player) {
+    return playerWorkersInPlay.get(player).size() == availablePlayerWorkerPool.get(player).size();
   }
 
   public void moveWorker(GridPosition newGridPosition, String workerId) throws GameBoardException {
@@ -103,6 +123,11 @@ public class SantoriniGameBoard {
     currentWorkerSquare.removeWorker();
     squareToMoveTo.placeWorker(workerId);
     playerIdGridPositionLookup.put(workerId, newGridPosition);
+    workerMovedAndAwaitingBlockPlacement = true;
+  }
+
+  private void swapCurrentPlayer() {
+    currentPlayer = currentPlayer == SantoriniPlayer.A ? SantoriniPlayer.B : SantoriniPlayer.A;
   }
 
   private String getNextWorkerId(SantoriniPlayer player) throws GameBoardException {
