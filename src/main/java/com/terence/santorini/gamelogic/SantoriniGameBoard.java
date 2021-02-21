@@ -11,15 +11,10 @@ import java.util.stream.Collectors;
 public class SantoriniGameBoard {
   List<List<SantoriniGameSquare>> gameBoard;
   HashMap<String, GridPosition> playerIdGridPositionLookup;
-
-  SantoriniPlayer currentPlayer;
-  SantoriniPlayer firstPlayer;
-  List<String> AWorkers = new ArrayList<>();
-  List<String> BWorkers = new ArrayList<>();
-  static final int WORKER_TOTAL = 2;
-
   Map<SantoriniPlayer, List<String>> playerWorkersInPlay;
   Map<SantoriniPlayer, List<String>> availablePlayerWorkerPool;
+  SantoriniPlayer currentPlayer;
+  SantoriniPlayer firstPlayer;
 
   private SantoriniGameBoard() {
     this.gameBoard = emptyBoard();
@@ -78,7 +73,7 @@ public class SantoriniGameBoard {
   private String getNextWorkerId(SantoriniPlayer player) throws GameBoardException {
     List<String> workers = this.playerWorkersInPlay.get(player);
 
-    if (workers.size() >= WORKER_TOTAL) {
+    if (workers.size() >= this.availablePlayerWorkerPool.get(player).size()) {
       throw new GameBoardException("Maximum number of workers reached");
     }
 
