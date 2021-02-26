@@ -14,4 +14,4 @@ FROM openjdk:11.0-jre-slim
 COPY --from=builder /app/build/libs/santorini.jar .
 EXPOSE 8080
 
-ENTRYPOINT java -jar santorini.jar
+ENTRYPOINT java -jar santorini.jar --spring.profiles.active=prod
