@@ -2,8 +2,8 @@
 FROM gradle:6.7.1-jdk11 as builder
 
 WORKDIR /app
-COPY build.gradle settings.gradle gradlew gradlew.bat ./
-COPY src ./src
+COPY backend/build.gradle settings.gradle gradlew gradlew.bat ./
+COPY backend/src ./src
 COPY gradle ./gradle
 RUN ./gradlew bootJar --profile --no-daemon
 RUN cd build/libs
