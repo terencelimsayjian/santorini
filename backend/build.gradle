@@ -52,5 +52,3 @@ spotless {
 		dbeaver()
 	}
 }
-
-//bootJar.dependsOn ':frontend:bundle'
