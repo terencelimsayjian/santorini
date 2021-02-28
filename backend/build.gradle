@@ -53,4 +53,4 @@ spotless {
 	}
 }
 
-bootJar.dependsOn ':frontend:npmBuild'
+//bootJar.dependsOn ':frontend:bundle'

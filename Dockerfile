@@ -1,17 +1,22 @@
-# Build
-FROM gradle:6.7.1-jdk11 as builder
-
+# Build Server
+FROM gradle:6.7.1-jdk11 as builder1
 WORKDIR /app
-COPY backend/build.gradle settings.gradle gradlew gradlew.bat ./
-COPY backend/src ./src
-COPY gradle ./gradle
-RUN ./gradlew bootJar --profile --no-daemon
-RUN cd build/libs
+COPY backend/settings.gradle ./
+COPY backend ./backend
+RUN gradle :santoriniserver:bootJar
+
+# Build Client
+FROM node:14.16.0-alpine3.10 as builder2
+COPY frontend ./frontend
+WORKDIR /frontend
+RUN npm run build
 
 # Run
 FROM openjdk:11.0-jre-slim
 
-COPY --from=builder /app/build/libs/santorini.jar .
-EXPOSE 8080
+COPY --from=builder1 /app/backend/build/libs/santoriniserver.jar .
+COPY --from=builder2 /frontend/build ./resources/static
+RUN ls
 
-ENTRYPOINT java -jar santorini.jar --spring.profiles.active=prod
+EXPOSE 8080
+ENTRYPOINT java -jar santoriniserver.jar --spring.profiles.active=local
