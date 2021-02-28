@@ -17,7 +17,7 @@ RUN npm run build
 FROM openjdk:11.0-jre-slim
 
 COPY --from=builder1 /app/backend/build/libs/santoriniserver.jar .
-COPY --from=builder2 /app/frontend/build ./resources/static
+COPY --from=builder2 /app/frontend/build ./resources
 
 EXPOSE 8080
 ENTRYPOINT java -jar santoriniserver.jar --spring.profiles.active=prod
