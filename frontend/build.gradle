@@ -1,0 +1,18 @@
+plugins {
+    id "com.github.node-gradle.node" version "3.0.1"
+}
+
+node {
+    download = false
+    version = "14.16.0"
+}
+
+task npmBuild(type: NpmTask, dependsOn: npmInstall) {
+    args = ['run', 'build']
+}
+
+task bundle(type: Copy) {
+    from './build'
+    into "${rootProject.projectDir}/backend/src/main/resources/static/."
+}
+
