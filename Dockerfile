@@ -10,6 +10,7 @@ FROM node:14.16.0-alpine3.10 as builder2
 WORKDIR /app
 COPY frontend ./frontend
 WORKDIR frontend
+RUN npm install
 RUN npm run build
 
 # Run
