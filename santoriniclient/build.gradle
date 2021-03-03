@@ -13,6 +13,6 @@ task npmBuild(type: NpmTask, dependsOn: npmInstall) {
 
 task bundle(type: Copy, dependsOn: npmBuild) {
     from './build'
-    into "${rootProject.projectDir}/backend/src/main/resources/static/."
+    into "${rootProject.projectDir}/santoriniserver/src/main/resources/static/."
 }
 

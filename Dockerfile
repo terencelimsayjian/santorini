@@ -6,7 +6,7 @@ RUN ./gradlew :santoriniserver:bootJar --no-daemon
 
 # Run
 FROM openjdk:11.0-jre-slim
-COPY --from=builder /app/backend/build/libs/santoriniserver.jar .
+COPY --from=builder /app/santoriniserver/build/libs/santoriniserver.jar .
 
 EXPOSE 8080
 ENTRYPOINT java -jar santoriniserver.jar --spring.profiles.active=prod

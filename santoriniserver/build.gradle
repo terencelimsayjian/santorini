@@ -12,6 +12,7 @@ repositories {
 	mavenCentral()
 }
 
+
 bootJar.dependsOn ':santoriniclient:bundle'
 
 dependencies {

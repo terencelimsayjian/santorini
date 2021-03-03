@@ -1,7 +1,4 @@
 rootProject.name = 'santorini'
 
-include('backend')
-include('frontend')
-
-project(':backend').name = 'santoriniserver'
-project(':frontend').name = 'santoriniclient'
+include('santoriniserver')
+include('santoriniclient')
