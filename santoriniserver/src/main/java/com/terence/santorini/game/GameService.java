@@ -73,12 +73,5 @@ public class GameService {
     gameRepository.save(gameEntity);
 
     return jsonGameBoard;
-
-    // Responses
-    // OK // Continue
-    // WIN
-    // Invalid move
-    // Not your turn
-
   }
 }
